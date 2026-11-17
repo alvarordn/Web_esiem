@@ -1,0 +1,12 @@
+Asunto: {nombre_evento} – Solicitud de participación de {nombre_empresa}
+
+Estimado/a {nombre_contacto}:
+
+Os agradecemos sinceramente el interés de {nombre_empresa} en participar en {nombre_evento}.
+
+Lamentamos comunicaros que en esta edición no podemos aceptar vuestra solicitud de participación, debido a la limitación de espacios disponibles para expositores.
+
+Esperamos poder contar con vosotros en futuras ediciones del Encuentro.
+
+Un cordial saludo,
+Comité organizador de {nombre_evento}

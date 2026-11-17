@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% block title %}Formulario de participación{% endblock %}
+
+{% block content %}
+<section class="max-w-3xl mx-auto px-4 sm:px-6 py-12">
+  <p class="text-sm font-bold text-oro uppercase tracking-wider">Empresas{% if step != 'done' %} · Paso {% if step == 'key' %}1{% else %}2{% endif %} de 2{% endif %}</p>
+  <h1 class="text-4xl md:text-5xl mt-2">Formulario de participación</h1>
+
+  <aside class="card p-5 mt-6 border-l-8 border-l-oro flex flex-col sm:flex-row sm:items-center gap-4 justify-between">
+    <div>
+      <p class="text-sm font-bold uppercase tracking-wider text-gray-500">Costes · empresas participantes</p>
+      <p class="font-display text-3xl text-azul">{{ event.participation_fee }}</p>
+    </div>
+    <p class="text-sm text-gray-600 sm:max-w-xs">Pago mediante transferencia bancaria o talón bancario.{% if event.payment_instructions %} Los datos de pago aparecen al final del formulario.{% endif %}</p>
+  </aside>
+
+  {% if step == 'done' %}
+    <div class="card p-6 md:p-8 mt-6 border-l-8 border-l-oro">
+      <h2 class="text-3xl">¡Solicitud recibida!</h2>
+      <p class="text-gray-700 mt-3">Gracias. Hemos recibido el formulario de participación de <strong>{{ company_name }}</strong>.</p>
+      <p class="text-gray-700 mt-3">La organización revisará la solicitud y os enviará un correo a la persona de contacto con la respuesta. Si se acepta, el correo incluirá el <strong>usuario y la contraseña</strong> para acceder al portal del expositor.</p>
+      <a href="{% url 'core:home' %}" class="btn btn-primary mt-6">Volver al inicio</a>
+    </div>
+  {% elif step == 'key' %}
+    <p class="text-gray-600 mt-6">La participación está reservada a empresas invitadas. Introduce la clave de invitación que recibiste por correo.</p>
+    <form method="post" class="card p-6 md:p-8 mt-6 space-y-6" novalidate>
+      {% csrf_token %}
+      {% include 'includes/form_field.html' with field=form.invitation_key %}
+      <button class="btn btn-primary w-full sm:w-auto">Continuar</button>
+    </form>
+  {% else %}
+    <p class="text-gray-600 mt-6">Completa los datos de tu empresa y del contrato de participación. La organización revisará la solicitud y os responderá por correo; si se acepta, recibiréis el usuario y la contraseña del portal del expositor.</p>
+    <form method="post" class="card p-6 md:p-8 mt-6" novalidate>
+      {% csrf_token %}
+      {{ form.non_field_errors }}
+
+      <fieldset class="grid gap-4 sm:grid-cols-2">
+        <legend class="font-display text-2xl text-azul mb-2 sm:col-span-2">Empresa</legend>
+        <div class="sm:col-span-2">{% include 'includes/form_field.html' with field=form.company_name %}</div>
+        {% include 'includes/form_field.html' with field=form.cif %}
+        {% include 'includes/form_field.html' with field=form.sector %}
+        <div class="sm:col-span-2">{% include 'includes/form_field.html' with field=form.address %}</div>
+        {% include 'includes/form_field.html' with field=form.city %}
+        {% include 'includes/form_field.html' with field=form.postal_code %}
+        {% include 'includes/form_field.html' with field=form.company_phone %}
+        {% include 'includes/form_field.html' with field=form.fax %}
+      </fieldset>
+
+      <fieldset class="grid gap-4 sm:grid-cols-2 mt-8">
+        <legend class="font-display text-2xl text-azul mb-2 sm:col-span-2">Persona de contacto</legend>
+        <div class="sm:col-span-2">{% include 'includes/form_field.html' with field=form.contact_name %}</div>
+        {% include 'includes/form_field.html' with field=form.contact_email %}
+        {% include 'includes/form_field.html' with field=form.contact_phone %}
+      </fieldset>
+
+      <fieldset class="grid gap-4 sm:grid-cols-2 mt-8">
+        <legend class="font-display text-2xl text-azul mb-2 sm:col-span-2">Datos personales del firmante del contrato</legend>
+        {% include 'includes/form_field.html' with field=form.first_name %}
+        {% include 'includes/form_field.html' with field=form.last_name %}
+        {% include 'includes/form_field.html' with field=form.position %}
+        {% include 'includes/form_field.html' with field=form.phone %}
+        <div class="sm:col-span-2">{% include 'includes/form_field.html' with field=form.email %}</div>
+      </fieldset>
+
+      <fieldset class="mt-8">
+        <legend class="font-display text-2xl text-azul mb-2">Pago</legend>
+        <p class="text-gray-700">Importe de participación: <strong>{{ event.participation_fee }}</strong></p>
+        <div class="mt-3">{% include 'includes/form_field.html' with field=form.payment_method %}</div>
+        {% if event.payment_instructions %}
+          <div class="mt-4 p-4 rounded-lg bg-gray-50 border border-gray-200 text-sm whitespace-pre-line">{{ event.payment_instructions }}</div>
+        {% endif %}
+      </fieldset>
+
+      <div class="mt-8">{% include 'includes/form_field.html' with field=form.accept_privacy %}</div>
+      <p class="text-sm text-gray-600 mt-1"><a class="text-azul underline" href="{% url 'core:legal' 'privacidad' %}" target="_blank">Política de privacidad</a></p>
+
+      <button class="btn btn-primary mt-8 w-full sm:w-auto">Enviar solicitud de participación</button>
+    </form>
+  {% endif %}
+</section>
+{% endblock %}

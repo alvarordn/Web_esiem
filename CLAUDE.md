@@ -1,0 +1,48 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+Web platform + CRM for **ESIEM (Encuentro Sobre Ingeniería y Empleo)**, a job fair at ETSi, Universidad de Sevilla (always written "ETSi", lowercase i, in UI copy). `especificaciones_del_proyecto.md` (Spanish) is the functional spec and source of truth for scope. UI copy and domain language are Spanish; code identifiers are English.
+
+## Commands (Windows / PowerShell, virtualenv in `.venv`)
+
+```powershell
+.\.venv\Scripts\python -m pip install -r requirements.txt
+.\.venv\Scripts\python manage.py migrate
+.\.venv\Scripts\python manage.py seed_demo          # demo companies/logos and demo users (printed)
+.\.venv\Scripts\python manage.py runserver
+.\.venv\Scripts\python manage.py test               # all tests
+.\.venv\Scripts\python manage.py test crm.tests.EmailTests.test_send_invitation_logs_history_and_marks_invited
+```
+
+The database is PostgreSQL only (no SQLite fallback): local service `postgresql-x64-18`, database/user/password `esiem`, configured through the `ESIEM_DB_*` variables in `.env`. The `esiem` role has `CREATEDB` so `manage.py test` can create its test database.
+
+There is no Node.js toolchain: Tailwind v4 is loaded from the CDN browser build in `templates/base.html`. No JS tests/linters exist; verify frontend changes in a browser.
+
+## Architecture
+
+Django 6.1 + DRF, server-rendered templates, vanilla JS. Three apps:
+
+- `accounts` — custom `User` (`AUTH_USER_MODEL`) with `is_company`, `is_staff_admin`, FK `company`. `user.is_organizer` (staff admin **or** superuser) is the single check for CRM access. Companies enter the CRM **only** through the public registration (no import, no "new company" in the panel; the API's company `create` returns 405). Invitations, with the invitation key, are emailed outside the app. Registration is two steps (`accounts/views.py:register`): the invitation key (`EventSettings.invitation_key`, kept in the session and re-validated on each request), then the "Formulario de participación" (company data, contract signer, designated contact, payment method; no user/password). It creates the `Company` with status `interested` («Interesada»), rejecting duplicates by name or CIF; the designated contact becomes the primary `CompanyContact` and a system `CRMNote` is written. Statuses: `interested` «Interesada» → `confirmed` «Aceptada» / `declined` «Rechazada», decided from the composer (see Email). Company users log in with the generic username from the acceptance email (`crm/credentials.py`: slug of the company name, legal form dropped, `-2`… if taken).
+- `core` — public site whose sections mirror the old esiem.es (home with countdown, carta del director, ETSi, ESIEM 2027 programme, empresas, cátedras, organizadores, síguenos, legal). On request, the contact page and "ediciones anteriores" are not included. The nav menu is built in `core.context_processors.event` (along with `event` = `EventSettings.load()`, a singleton with pk=1 holding date, invitation key, programme, fee and payment instructions). Institutional lists (organizers, cátedras, social links, ETSi figures) live in `core/content.py` with logos in `static/img/`. The public directory only lists `status=confirmed` companies, passed to `static/js/directory.js` via `json_script` (filtering is client-side).
+- `crm` — models from spec section 6, REST API under `/api/` (`crm/api.py`) and the private panel page. Every CRM model inherits `EditionModel`: an `edition` year (default `core.models.current_edition()` = year of `EventSettings.event_date`; `EventSettings.year`/`edition_name` are derived properties, no fields). Changing the event date to another year starts a new edition: the site, registration duplicate checks, the API and the panel only use `.current()` records (and companies reached through them); past editions stay in the DB for the Django admin. `Company` names are unique per edition (case-insensitive), so a company joins a new edition by sending the form again; company users of a past edition can't log in (`User.has_portal_access`). `Objective.days_before_event` (event date − deadline) is computed on save for the current edition; saving `EventSettings` (`crm/signals.py`) moves the current deadlines with the date or, for a new edition, copies the latest edition's objectives (not done) at the same offsets.
+
+### Private area: one panel, two roles
+
+`/panel/` renders `templates/crm/panel.html`; all UI is built by `static/js/panel.js` against the API. Organizers have two top-level tabs (`#main-tabs`, `showView`): «Empresas» (default: the company overview and company pages) and «Registro» (`?vista=registro`). «Registro» is a diary of event-organization actions, independent of companies: `OrganizationLogEntry` (immutable, optional FK to `Objective`), with `Objective` (title, deadline, done) seeded from `objetivos.txt` in migration 0006. Objectives show as rectangles. Clicking one unfolds its diary below its row. Completing or reopening an objective logs an entry. Organizers and company users get the **same tab renderers** (attendees, dossier); organizers also get "Resumen & Bitácora" (with the only email composer: acceptance, rejection, follow-up, attendee-list request and materials request) and a company selector. Permissions are enforced in the API, not the JS:
+
+- `CompanyScopedViewSet` filters company users to their own company and forces `company` on create/update. Organizers must pass `company`.
+- Company users get `CompanyPortalSerializer` (name, status, stand, public summary, CIF, sector read-only; website and contract/billing data editable, shown in their «Datos generales» tab, which hides stand and public summary). Their edits are logged as a system `CRMNote` listing the changed fields.
+- «Dossier y Stand» materials (`CompanyDocumentation`) come in two groups, `crm/materials.py:GROUPS`: catálogo (`logo`, `dossier`, `advert`) and stand (`banner`, shown as «Platabanda»). Organizers download them as ZIPs (one folder per company plus a `LEEME.txt` of what's missing): `companies/{id}/materials-zip/` for one company, `companies/materials-zip/?group=catalogo|stand` for all.
+- Contacts, notes, email history/sending and templates are `IsOrganizer` only. Notes are list/create only (immutable log).
+- "Real-time" sync between admin and company is a 30 s poll in `panel.js` (`state.refreshers`), which skips re-rendering lists while a form is open.
+
+### Email
+
+`crm/emailing.py`: `.txt` templates in `email_templates/` (first line `Asunto: …`), `{placeholder}` substitution at load time, then the admin edits freely. `DEFAULT_TEMPLATES` maps each email kind (the composer's «Tipo de correo») to its default draft. Sending goes one message per recipient, recipients must be contacts of that company, and every send is logged in `EmailHistory` and as a `CRMNote(kind=email)` in the Bitácora (summary line, blank line, message; the timeline collapses the message). `acceptance`/`rejection` sends decide the status (`CompanyViewSet._apply_decision`). The acceptance template (`aceptacion.txt`, any template using `{usuario}`/`{contraseña}`) gets credentials from the `email-template` endpoint: the company's current ones if it already has a portal user, else a generated username and password. The «Resumen & Bitácora» tab always shows them in the «Acceso al portal del expositor» box below «Contactos» (`companies/{id}/portal-credentials/`, `state.access`); the composer writes the box's values into the acceptance draft and rewrites them on edit (whole-token replace). Once the company is `confirmed` the box is read-only (the password stays editable only if it wasn't kept, so it can be reset by resending), and the API rejects different credentials. The client posts them back with `send-email`, and only then the portal user is created or reset (`credentials.grant_access`), the status becomes `confirmed`, and the plain password is kept in `Company.portal_password`. Organizers see it in the company header (`portal_access`, never exposed to company users) so they can resend it. Rejection sets `declined` and deactivates any portal user. Mail uses Django 6.1's `MAILERS` setting (SMTP when `ESIEM_SMTP_HOST` is set, console otherwise; see `esiem/settings.py`). Settings also reads a gitignored `.env` at the repo root (template: `.env.example`). Real env vars take precedence, and `.env` changes need a `runserver` restart. The US SMTP (`mail.us.es`) accepts login but refuses to relay, so `ESIEM_EMAIL_AUTOMATIC=false` (`settings.EMAIL_AUTOMATIC_SENDING`) hides automatic sending. In that mode the composer opens the draft in Outlook web or via `mailto:` and, once the organizer confirms, posts `send-email` with `manual: true`. That only logs `EmailHistory(manual=True)` and applies the same status change, without sending.
+
+## Frontend conventions
+
+- Brand tokens (from `estilo/Identidad Corporativa/Manual_Identidad_ESIEM.pdf`): gold `#D99309`, red `#921D1A`, blue `#002F7D`. Available as CSS vars in `static/css/esiem.css` and as Tailwind colors `oro` / `rojo` / `azul` (`@theme` in `base.html`). Display font: Myriad (licensed) falling back to Barlow Semi Condensed, bold italic.
+- `esiem.css` declares `@layer theme, base, components, utilities;` and puts everything in `components`, so Tailwind utilities override component classes (`.btn`, `.card`, `.field`, `.tab`…). Don't add unlayered rules or put rules in `base` (Tailwind's preflight would reset them).
+- In `panel.js`, escape every interpolated value with `esc()`. Read form controls through `form.elements[name]`, since `form.name` is shadowed by the form's own property. Each tab renders into a fresh element, so listeners never pile up.

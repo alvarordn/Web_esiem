@@ -1,0 +1,14 @@
+Asunto: {nombre_evento} – Lista de asistentes de {nombre_empresa}
+
+Estimado/a {nombre_contacto}:
+
+Para organizar las acreditaciones y el servicio de catering de {nombre_evento} ({fecha_evento}), necesitamos conocer las personas de {nombre_empresa} que acudirán al stand.
+
+Podéis registrarlas directamente en el portal del expositor, en la pestaña «Personas que asistirán al evento», indicando para cada una: nombre, apellidos, DNI, cargo, email, teléfono y posibles alergias o necesidades dietéticas.
+
+Si todavía no tenéis cuenta, podéis crearla aquí: {enlace_registro} (clave de invitación: {clave_registro}).
+
+Gracias de antemano.
+
+Un cordial saludo,
+Comité organizador de {nombre_evento}

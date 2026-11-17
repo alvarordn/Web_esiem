@@ -1,0 +1,10 @@
+{% load static %}
+{# Image pop-up driven by static/js/lightbox.js: add data-lightbox="<url>" data-caption="…" to any element. #}
+<dialog id="lightbox" class="m-auto max-w-[min(92vw,960px)] w-full bg-transparent p-0 backdrop:bg-black/80" aria-label="Imagen ampliada">
+  <figure class="relative">
+    <img id="lightbox-img" src="" alt="" class="w-full max-h-[80vh] object-contain rounded-xl bg-white">
+    <figcaption id="lightbox-caption" class="mt-3 text-center text-white font-display text-2xl"></figcaption>
+    <button type="button" data-lightbox-close class="absolute -top-3 -right-3 w-10 h-10 rounded-full bg-oro text-white text-2xl leading-none shadow-lg hover:bg-rojo" aria-label="Cerrar">×</button>
+  </figure>
+</dialog>
+<script src="{% static 'js/lightbox.js' %}" defer></script>

@@ -1,0 +1,8 @@
+{% load static %}
+<div class="mt-6 grid grid-cols-2 lg:grid-cols-4 gap-3">
+  {% for org in organizers %}
+    <a href="{{ org.url }}" target="_blank" rel="noopener noreferrer" class="card logo-tile h-28 hover:border-azul transition-colors" title="{{ org.name }}">
+      {% if org.logo %}<img src="{% static org.logo %}" alt="{{ org.name }}" loading="lazy">{% else %}<span class="font-display text-xl text-azul text-center">{{ org.name }}</span>{% endif %}
+    </a>
+  {% endfor %}
+</div>

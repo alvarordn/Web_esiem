@@ -1,0 +1,12 @@
+Asunto: {nombre_evento} – Seguimiento de la participación de {nombre_empresa}
+
+Estimado/a {nombre_contacto}:
+
+Nos ponemos en contacto con vosotros en relación con la participación de {nombre_empresa} en {nombre_evento}, que se celebrará el {fecha_evento} en {lugar_evento}.
+
+[Escribe aquí el motivo de la consulta o el seguimiento.]
+
+Quedamos atentos a vuestra respuesta.
+
+Un cordial saludo,
+Comité organizador de {nombre_evento}

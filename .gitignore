@@ -1,0 +1,19 @@
+.venv/
+__pycache__/
+*.pyc
+media/
+staticfiles/
+.env
+
+# Database copies: real contact data and password hashes.
+backups/
+*.sqlite3
+*.sqlite3.bak
+*.backup
+*.dump
+
+# Editors / OS
+.vscode/
+.idea/
+Thumbs.db
+desktop.ini

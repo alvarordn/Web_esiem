@@ -1,0 +1,266 @@
+/* ESIEM design tokens (Manual de Identidad ESIEM) and shared components.
+   Layout uses Tailwind utilities; brand colors are also exposed to Tailwind via @theme in base.html.
+   Rules live in Tailwind's cascade layers so utilities (md:hidden, border-white/40…) can override them;
+   this file loads before Tailwind's runtime styles, so it declares the layer order itself. */
+
+@layer theme, base, components, utilities;
+
+/* Not in "base": Tailwind's preflight lives there and loads later, so it would reset these. */
+@layer components {
+:root {
+  --esiem-gold: #D99309;
+  --esiem-red: #921D1A;
+  --esiem-blue: #002F7D;
+  /* Tints used by the isotype artwork */
+  --esiem-gold-light: #FCBF45;
+  --esiem-red-light: #B6191E;
+  --esiem-blue-light: #24398C;
+
+  --ink: #1d1d1b;
+  --muted: #5b6170;
+  --line: #e3e5ea;
+  --surface: #ffffff;
+  --surface-alt: #f5f6f8;
+
+  --font-display: 'Myriad Pro', 'Barlow Semi Condensed', 'Arial Narrow', sans-serif;
+  --font-body: 'Source Sans 3', 'Myriad Pro', system-ui, sans-serif;
+  --radius: 10px;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--ink);
+  background: var(--surface-alt);
+}
+
+.font-display,
+h1, h2, h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-style: italic;
+  letter-spacing: -0.01em;
+}
+}
+
+@layer components {
+/* Stripe in the three brand colors, echoing the isotype */
+.brand-stripe {
+  height: 6px;
+  background: linear-gradient(90deg, var(--esiem-gold) 0 33.3%, var(--esiem-red) 33.3% 66.6%, var(--esiem-blue) 66.6%);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  padding: .6rem 1.15rem;
+  border-radius: var(--radius);
+  font-weight: 600;
+  border: 1px solid transparent;
+  transition: background-color .15s, color .15s, border-color .15s, opacity .15s;
+  cursor: pointer;
+  line-height: 1.2;
+}
+.btn:disabled { opacity: .55; cursor: not-allowed; }
+.btn-primary { background: var(--esiem-blue); color: #fff; }
+.btn-primary:hover:not(:disabled) { background: #00225c; }
+.btn-accent { background: var(--esiem-gold); color: #1d1d1b; }
+.btn-accent:hover:not(:disabled) { background: #c28207; }
+.btn-danger { background: var(--esiem-red); color: #fff; }
+.btn-danger:hover:not(:disabled) { background: #761714; }
+.btn-ghost { background: transparent; color: var(--esiem-blue); border-color: var(--line); }
+.btn-ghost:hover:not(:disabled) { border-color: var(--esiem-blue); }
+.btn-sm { padding: .35rem .7rem; font-size: .875rem; }
+/* Acceptance / rejection of companies that sent the participation form. */
+.btn-accept { background: #1f7a3d; color: #fff; }
+.btn-accept:hover:not(:disabled) { background: #17602f; }
+.btn-reject { background: var(--esiem-red); color: #fff; }
+.btn-reject:hover:not(:disabled) { background: #761714; }
+
+/* Custom file picker (panel uploads): <label.file-picker><input type=file><span.file-picker-btn>
+   <span.file-picker-name></label>. The native input stays in the label (clicking anywhere opens the
+   dialog, `required` still validates) but is invisible. */
+.file-picker {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  min-width: 0;
+  padding: .3rem;
+  border: 1px solid #cfd3db;
+  border-radius: var(--radius);
+  background: #fff;
+  cursor: pointer;
+}
+.file-picker:hover { border-color: var(--esiem-blue); }
+.file-picker:focus-within { outline: 2px solid color-mix(in srgb, var(--esiem-blue) 35%, transparent); border-color: var(--esiem-blue); }
+.file-picker input[type=file] {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  padding: 0;
+  border: 0;
+}
+.file-picker-btn {
+  flex: none;
+  padding: .4rem .85rem;
+  border: 1px solid var(--esiem-blue);
+  border-radius: calc(var(--radius) - 2px);
+  background: #e1eaf8;
+  color: var(--esiem-blue);
+  font-size: .875rem;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: background-color .15s, color .15s;
+}
+.file-picker:hover .file-picker-btn { background: var(--esiem-blue); color: #fff; }
+.file-picker-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: .875rem;
+  color: var(--muted);
+}
+.file-picker-name.has-file { color: var(--ink); font-weight: 600; }
+
+/* Any other native file input: framed field with a visible button. */
+input[type=file] {
+  border: 1px solid #cfd3db;
+  border-radius: var(--radius);
+  background: #fff;
+  padding: .3rem;
+  color: var(--muted);
+  max-width: 100%;
+  cursor: pointer;
+}
+input[type=file]:hover { border-color: var(--esiem-blue); }
+input[type=file]:focus-visible { outline: 2px solid color-mix(in srgb, var(--esiem-blue) 35%, transparent); }
+input[type=file]::file-selector-button {
+  margin-right: .75rem;
+  padding: .4rem .85rem;
+  border: 1px solid var(--esiem-blue);
+  border-radius: calc(var(--radius) - 2px);
+  background: #e1eaf8;
+  color: var(--esiem-blue);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+input[type=file]::file-selector-button:hover { background: var(--esiem-blue); color: #fff; }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: calc(var(--radius) + 4px);
+}
+
+.input, .field input:not([type=checkbox]):not([type=radio]):not([type=file]), .field select, .field textarea {
+  width: 100%;
+  padding: .55rem .75rem;
+  border: 1px solid #cfd3db;
+  border-radius: var(--radius);
+  background: #fff;
+  font: inherit;
+}
+.input:focus, .field input:focus, .field select:focus, .field textarea:focus {
+  outline: 2px solid color-mix(in srgb, var(--esiem-blue) 35%, transparent);
+  border-color: var(--esiem-blue);
+}
+.field label { display: block; font-weight: 600; font-size: .9rem; margin-bottom: .3rem; }
+/* RadioSelect: each option renders as <div><label><input> text</label></div> */
+.field div > div > label { display: flex; align-items: center; gap: .5rem; font-weight: 400; }
+.field .helptext, .field-help { display: block; font-size: .8rem; color: var(--muted); margin-top: .25rem; }
+.field .errorlist, .errorlist { color: var(--esiem-red); font-size: .85rem; margin-top: .25rem; list-style: none; padding: 0; }
+
+.tabs { display: flex; gap: .25rem; border-bottom: 1px solid var(--line); overflow-x: auto; }
+.tab {
+  padding: .75rem 1rem;
+  font-weight: 600;
+  color: var(--muted);
+  border-bottom: 3px solid transparent;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.tab:hover { color: var(--esiem-blue); }
+.tab[aria-selected="true"] { color: var(--esiem-blue); border-bottom-color: var(--esiem-gold); }
+
+.badge {
+  display: inline-block;
+  padding: .15rem .55rem;
+  border-radius: 999px;
+  font-size: .75rem;
+  font-weight: 700;
+  background: var(--surface-alt);
+  color: var(--muted);
+}
+.badge-interested,
+.badge-invited { background: #fdf1d8; color: #8a5d05; }
+.badge-confirmed { background: #e1eaf8; color: var(--esiem-blue); }
+.badge-declined { background: #f7e1e0; color: var(--esiem-red); }
+
+.timeline { border-left: 3px solid var(--line); margin-left: .5rem; padding-left: 1.25rem; }
+.timeline-item { position: relative; padding-bottom: 1.1rem; }
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: calc(-1.25rem - 8px);
+  top: .35rem;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: var(--esiem-gold);
+  border: 2px solid #fff;
+}
+.timeline-item.kind-system::before { background: var(--esiem-blue); }
+.timeline-item.kind-call::before { background: var(--esiem-red); }
+
+.data-table { width: 100%; border-collapse: collapse; font-size: .92rem; }
+.data-table th { text-align: left; font-weight: 700; color: var(--muted); font-size: .8rem; text-transform: uppercase; letter-spacing: .03em; }
+.data-table th, .data-table td { padding: .55rem .6rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+
+.toast {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 60;
+  max-width: min(420px, calc(100vw - 2rem));
+  padding: .8rem 1rem;
+  border-radius: var(--radius);
+  color: #fff;
+  background: var(--esiem-blue);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, .18);
+}
+.toast.error { background: var(--esiem-red); }
+
+.countdown-unit {
+  min-width: 5.5rem;
+  padding: .9rem .6rem;
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, .1);
+  border: 1px solid rgba(255, 255, 255, .2);
+  text-align: center;
+}
+.countdown-unit strong { display: block; font-family: var(--font-display); font-style: italic; font-size: 2.6rem; line-height: 1; }
+.countdown-unit span { font-size: .8rem; text-transform: uppercase; letter-spacing: .08em; opacity: .85; }
+
+.logo-tile {
+  height: 96px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: #fff;
+}
+.logo-tile img { max-height: 100%; max-width: 100%; object-fit: contain; }
+
+.prose-esiem p { margin-bottom: 1rem; line-height: 1.7; }
+.prose-esiem h2 { font-size: 1.5rem; margin: 2rem 0 .75rem; color: var(--esiem-blue); }
+.prose-esiem ul { list-style: disc; padding-left: 1.5rem; margin-bottom: 1rem; }
+}
+
+[hidden] { display: none !important; }

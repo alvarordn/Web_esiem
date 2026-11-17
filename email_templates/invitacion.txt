@@ -1,0 +1,19 @@
+Asunto: Invitación a {nombre_evento} – Encuentro Sobre Ingeniería y Empleo
+
+Estimado/a {nombre_contacto}:
+
+Desde el comité organizador de {nombre_evento}, el Encuentro Sobre Ingeniería y Empleo de la Escuela Técnica Superior de Ingeniería de la Universidad de Sevilla, nos complace invitar a {nombre_empresa} a participar como empresa expositora.
+
+El encuentro tendrá lugar el {fecha_evento} en {lugar_evento}. Es una oportunidad para conocer de primera mano el talento de nuestros estudiantes y titulados de ingeniería, presentar vuestras ofertas de empleo y prácticas y reforzar vuestra marca como empleador.
+
+Para confirmar vuestra participación, registraos en el portal del expositor:
+
+  Enlace de registro: {enlace_registro}
+  Clave de invitación: {clave_registro}
+
+Desde el portal podréis indicar las personas que asistirán al stand, subir vuestro dossier y logotipo y comunicarnos las necesidades logísticas.
+
+Quedamos a vuestra disposición para cualquier consulta.
+
+Un cordial saludo,
+Comité organizador de {nombre_evento}

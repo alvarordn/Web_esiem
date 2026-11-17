@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{% if user.is_organizer %}CRM{% else %}Portal del expositor{% endif %}{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block content %}
+{% csrf_token %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+  {% if user.is_organizer %}
+    <div class="flex flex-col lg:flex-row lg:items-center gap-4 justify-between">
+      <div>
+        <p class="text-sm font-bold text-oro uppercase tracking-wider">CRM del organizador</p>
+        <h1 class="text-3xl md:text-4xl">Ficha 360º de Empresa</h1>
+      </div>
+      <div class="lg:w-[460px]">
+        <div class="relative">
+          <label for="company-search" class="sr-only">Buscar empresa</label>
+          <input id="company-search" type="search" class="input" placeholder="Buscar empresa por nombre, CIF o email…" autocomplete="off"
+                 role="combobox" aria-expanded="false" aria-controls="company-results">
+          <ul id="company-results" class="card absolute z-30 mt-1 w-full max-h-80 overflow-y-auto shadow-lg" role="listbox" hidden></ul>
+        </div>
+      </div>
+    </div>
+    <nav id="main-tabs" class="tabs mt-6" role="tablist" aria-label="Secciones del panel">
+      <button type="button" class="tab" role="tab" data-view="empresas" aria-selected="false">Empresas</button>
+      <button type="button" class="tab" role="tab" data-view="registro" aria-selected="false">Registro</button>
+    </nav>
+  {% else %}
+    <p class="text-sm font-bold text-oro uppercase tracking-wider">Portal del expositor</p>
+  {% endif %}
+
+  <div id="company-header" class="mt-6"></div>
+  <nav id="tabs" class="tabs mt-6" role="tablist" hidden></nav>
+  <div id="tab-panel" class="mt-6" role="tabpanel"></div>
+</div>
+
+<div id="toast" class="toast" role="status" hidden></div>
+{{ panel_config|json_script:"panel-config" }}
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/panel.js' %}?v={{ panel_js_version }}" defer></script>
+{% include 'includes/lightbox.html' %}
+{% endblock %}

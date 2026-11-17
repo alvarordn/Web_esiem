@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{{ event.edition_name }}{% endblock %}
+
+{% block content %}
+<section class="relative overflow-hidden bg-azul text-white">
+  <img src="{% static 'img/esiem-isotipo.svg' %}" alt="" aria-hidden="true" class="absolute -right-24 -bottom-24 w-[420px] md:w-[560px] opacity-15 pointer-events-none select-none">
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 py-16 md:py-24">
+    <p class="uppercase tracking-[.2em] text-oro font-bold text-sm">Encuentro Sobre Ingeniería y Empleo</p>
+    <h1 class="text-5xl md:text-7xl mt-3">{{ event.edition_name }}</h1>
+    <p class="mt-4 text-lg md:text-xl max-w-2xl text-blue-100">
+      La feria de empleo y talento de la Escuela Técnica Superior de Ingeniería de la Universidad de Sevilla.
+    </p>
+    <p class="mt-6 text-lg font-semibold">
+      {% if event.event_date %}{{ event.event_date|date:"l j \d\e F \d\e Y" }}{% else %}Fecha por confirmar{% endif %}
+      <span class="opacity-70 font-normal">· {{ event.venue }}</span>
+    </p>
+
+    {% if event.event_date %}
+    <div id="countdown" class="mt-8 flex flex-wrap gap-3" data-target="{{ event.event_date|date:'c' }}" aria-live="polite">
+      <div class="countdown-unit"><strong data-unit="days">--</strong><span>días</span></div>
+      <div class="countdown-unit"><strong data-unit="hours">--</strong><span>horas</span></div>
+      <div class="countdown-unit"><strong data-unit="minutes">--</strong><span>minutos</span></div>
+      <div class="countdown-unit"><strong data-unit="seconds">--</strong><span>segundos</span></div>
+    </div>
+    <p id="countdown-done" class="mt-8 text-2xl font-display text-oro" hidden>¡El encuentro ya ha comenzado!</p>
+    {% endif %}
+
+    <div class="mt-10 flex flex-wrap gap-3">
+      <a href="{% url 'core:directory' %}" class="btn btn-accent">Ver empresas participantes</a>
+      <a href="{% url 'core:letter' %}" class="btn border-white/40 text-white hover:bg-white/10">Carta del director</a>
+      <a href="{% url 'accounts:register' %}" class="btn border-white/40 text-white hover:bg-white/10">Soy empresa invitada</a>
+    </div>
+  </div>
+</section>
+
+<section class="max-w-7xl mx-auto px-4 sm:px-6 -mt-8 relative">
+  <div class="card grid grid-cols-2 md:grid-cols-4 divide-x divide-y md:divide-y-0 divide-gray-200 overflow-hidden">
+    {% for value, label in home_figures %}
+      <div class="p-6 text-center">
+        <p class="font-display text-4xl {% cycle 'text-oro' 'text-azul' 'text-rojo' 'text-azul' %}">{{ value }}</p>
+        <p class="text-sm text-gray-600 mt-1">{{ label }}</p>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="max-w-7xl mx-auto px-4 sm:px-6 mt-16 grid gap-6 md:grid-cols-3">
+  <a href="{% url 'core:event' %}" class="card p-6 hover:border-azul transition-colors group">
+    <p class="text-sm font-bold text-oro uppercase tracking-wider">La jornada</p>
+    <h2 class="text-2xl mt-2 group-hover:text-azul">Programa de {{ event.edition_name }}</h2>
+    <p class="text-gray-600 mt-2">Stands de empresas, presentaciones y mesas redondas durante toda la jornada.</p>
+  </a>
+  <a href="{% url 'core:directory' %}" class="card p-6 hover:border-azul transition-colors group">
+    <p class="text-sm font-bold text-rojo uppercase tracking-wider">Directorio</p>
+    <h2 class="text-2xl mt-2 group-hover:text-azul">Empresas expositoras</h2>
+    <p class="text-gray-600 mt-2">Filtra por sector y descubre qué empresas estarán presentes este año.</p>
+  </a>
+  <a href="{% url 'core:letter' %}" class="card p-6 hover:border-azul transition-colors group">
+    <p class="text-sm font-bold text-azul uppercase tracking-wider">Bienvenida</p>
+    <h2 class="text-2xl mt-2 group-hover:text-azul">Carta del director</h2>
+    <p class="text-gray-600 mt-2">Los objetivos y valores que guían el encuentro entre empresas y talento de ingeniería.</p>
+  </a>
+</section>
+
+{% if featured_companies %}
+<section class="max-w-7xl mx-auto px-4 sm:px-6 mt-16">
+  <div class="flex items-end justify-between gap-4">
+    <h2 class="text-3xl">Ya han confirmado</h2>
+    <a href="{% url 'core:directory' %}" class="text-azul font-semibold hover:underline">Ver todas →</a>
+  </div>
+  <div class="mt-6 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+    {% for company in featured_companies %}
+      <div class="card logo-tile" title="{{ company.name }}">
+        {% if company.logo %}<img src="{{ company.logo }}" alt="{{ company.name }}" loading="lazy">{% else %}<span class="font-semibold text-center">{{ company.name }}</span>{% endif %}
+      </div>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+<section class="max-w-7xl mx-auto px-4 sm:px-6 mt-16">
+  <div class="card p-8 md:p-10 flex flex-col md:flex-row gap-6 md:items-center justify-between border-l-8 border-l-oro">
+    <div>
+      <h2 class="text-3xl">¿Tu empresa ha recibido la invitación?</h2>
+      <p class="text-gray-600 mt-2 max-w-2xl">Regístrate con la clave de invitación para gestionar tu stand, tus asistentes y tu dossier corporativo.</p>
+    </div>
+    <div class="flex gap-3 shrink-0">
+      <a href="{% url 'accounts:register' %}" class="btn btn-primary">Formulario de participación</a>
+    </div>
+  </div>
+</section>
+
+<section class="max-w-7xl mx-auto px-4 sm:px-6 mt-16">
+  <div class="flex items-end justify-between gap-4">
+    <h2 class="text-3xl">Organizadores</h2>
+    <a href="{% url 'core:organizers' %}" class="text-azul font-semibold hover:underline">Más →</a>
+  </div>
+  {% include 'core/includes/organizer_logos.html' %}
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/countdown.js' %}" defer></script>
+{% endblock %}

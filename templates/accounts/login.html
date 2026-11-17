@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Área privada{% endblock %}
+
+{% block content %}
+<section class="max-w-md mx-auto px-4 sm:px-6 py-16">
+  <div class="text-center">
+    <img src="{% static 'img/esiem-isotipo.svg' %}" alt="" class="h-16 mx-auto">
+    <h1 class="text-4xl mt-4">Área privada</h1>
+    <p class="text-gray-600 mt-2">Organización y empresas expositoras</p>
+  </div>
+  <form method="post" class="card p-6 md:p-8 mt-8 space-y-4">
+    {% csrf_token %}
+    {% if form.non_field_errors %}<div class="text-rojo text-sm">{% for e in form.non_field_errors %}{{ e }}{% endfor %}</div>{% endif %}
+    {% include 'includes/form_fields.html' %}
+    <input type="hidden" name="next" value="{{ next }}">
+    <button class="btn btn-primary w-full">Entrar</button>
+  </form>
+  <p class="text-center text-sm text-gray-600 mt-6">
+    ¿Tu empresa ha recibido una invitación? <a class="text-azul font-semibold hover:underline" href="{% url 'accounts:register' %}">Regístrala aquí</a>
+  </p>
+</section>
+{% endblock %}

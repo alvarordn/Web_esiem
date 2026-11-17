@@ -1,0 +1,16 @@
+Asunto: {nombre_evento} – Participación de {nombre_empresa} aceptada
+
+Estimado/a {nombre_contacto}:
+
+Nos complace comunicaros que la solicitud de participación de {nombre_empresa} en {nombre_evento}, que se celebrará el {fecha_evento} en {lugar_evento}, ha sido aceptada. ¡Bienvenidos!
+
+Ya podéis acceder al portal del expositor, desde donde podréis revisar los datos de la empresa, indicar las personas que asistirán al evento y subir el material corporativo (logotipo, dossier, anuncio y platabanda del stand):
+
+  Acceso:      {enlace_acceso}
+  Usuario:     {usuario}
+  Contraseña:  {contraseña}
+
+Os recomendamos guardar este correo. Si tenéis cualquier duda, responded a este mensaje.
+
+Un cordial saludo,
+Comité organizador de {nombre_evento}

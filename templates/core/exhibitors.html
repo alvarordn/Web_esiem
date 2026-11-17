@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Información para expositores{% endblock %}
+{% block description %}Stand, presentaciones, catering y coste de participación de las empresas expositoras en {{ event.edition_name }}.{% endblock %}
+
+{% block content %}
+<section class="max-w-5xl mx-auto px-4 sm:px-6 py-12">
+  <p class="text-sm font-bold text-oro uppercase tracking-wider">{{ event.edition_name }} · Empresas</p>
+  <h1 class="text-4xl md:text-5xl mt-2">Información para expositores</h1>
+  <p class="text-gray-600 mt-4 max-w-3xl">Todo lo que incluye la participación de tu empresa en el Encuentro: stand, presentaciones, jornada exclusiva en la ETSi y catering.</p>
+
+  <nav class="mt-6 flex flex-wrap gap-2" aria-label="Secciones">
+    {% for anchor, label in sections %}
+      <a href="#{{ anchor }}" class="rounded-full border border-gray-300 px-4 py-1.5 text-sm font-semibold hover:border-azul hover:text-azul">{{ label }}</a>
+    {% endfor %}
+  </nav>
+
+  {# Stand #}
+  <article id="stand" class="card p-6 md:p-8 mt-8 border-t-4 border-t-azul scroll-mt-24">
+    <h2 class="text-3xl">Stand</h2>
+    <div class="mt-4 grid gap-6 md:grid-cols-[1fr_auto] md:items-start">
+      <p class="text-lg text-gray-700">El stand será de <strong>3 × 2 m²</strong> e irá ubicado en la planta baja de la Escuela. Se trata de un <strong>stand modular blanco de 2,5 m de alto</strong>.</p>
+      <img src="{% static 'img/expositores/stand01.jpg' %}" width="230" height="169" alt="Stand modular blanco de ESIEM" class="rounded-xl shadow ring-1 ring-black/5 md:w-64">
+    </div>
+
+    <h3 class="font-display text-2xl text-azul mt-8">Características técnicas</h3>
+    <ul class="mt-4 space-y-3 text-gray-700">
+      <li class="flex gap-3"><span class="text-oro">●</span><span>Suelo debidamente acondicionado con moqueta tipo ferial color azul azafata con plástico protector.</span></li>
+      <li class="flex gap-3"><span class="text-oro">●</span><span>Estructura de perfilería de aluminio lacado en blanco de 2,5 m de altura con cerramiento en panelería de melamina color blanco de 1 m de ancho. Frontis en fachada para rótulo con texto en vinilo adhesivo color negro (15 caracteres máximo).</span></li>
+      <li class="flex gap-3"><span class="text-oro">●</span><span>Instalación eléctrica con un cuadro eléctrico monofásico con una base de enchufe para diferencial y magnetotérmico, e iluminación de 50 W/m² a base de focos halógenos orientables en carril electrificado, ubicados en la cara interna de la platabanda.</span></li>
+      <li class="flex gap-3"><span class="text-oro">●</span><span>El stand estará cerrado completamente por los paneles de melamina blancos antes descritos, excepto por la parte frontal.</span></li>
+    </ul>
+
+    <h3 class="font-display text-2xl text-azul mt-8">Mobiliario incluido</h3>
+    <ul class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      {% for qty, item in furniture %}
+        <li class="rounded-xl bg-gray-50 border border-gray-200 p-4">
+          <p class="font-display text-3xl text-oro">{{ qty }}</p>
+          <p class="text-gray-700 mt-1">{{ item }}</p>
+        </li>
+      {% endfor %}
+    </ul>
+
+    <div class="mt-8 grid gap-4 grid-cols-2 lg:grid-cols-4">
+      {% for file, caption in gallery %}
+        <figure class="rounded-xl border border-gray-200 bg-white p-3 flex flex-col">
+          <button type="button" data-lightbox="{% static file %}" data-caption="{{ caption }}"
+                  class="group relative block w-full cursor-zoom-in rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-azul"
+                  aria-label="Ampliar imagen: {{ caption }}">
+            <img src="{% static file %}" alt="{{ caption }}" loading="lazy" class="rounded-lg w-full aspect-[4/3] object-contain bg-gray-50 transition-transform group-hover:scale-[1.03]">
+            <span aria-hidden="true" class="absolute right-2 bottom-2 rounded-full bg-azul/85 text-white w-8 h-8 grid place-items-center text-lg leading-none opacity-80 group-hover:opacity-100">+</span>
+          </button>
+          <figcaption class="text-sm font-semibold text-center mt-2">{{ caption }}</figcaption>
+        </figure>
+      {% endfor %}
+    </div>
+  </article>
+
+  {# Presentación #}
+  <article id="presentacion" class="card p-6 md:p-8 mt-6 border-t-4 border-t-rojo scroll-mt-24">
+    <h2 class="text-3xl">Presentación</h2>
+    <div class="prose-esiem text-gray-700 mt-4 space-y-4">
+      <p>Continuando con el espíritu de acercamiento de los alumnos a la situación laboral, las empresas que así lo soliciten tendrán a su disposición <strong>cuatro salas con medios audiovisuales</strong> (cañón proyector, ordenador, micrófono, etc.) para realizar su presentación.</p>
+      <p>Las primeras rondas de presentaciones comenzarán a media mañana y las segundas serán posteriores al almuerzo. En ellas, turnos de cuatro empresas de distintos sectores expondrán simultáneamente. La duración de la charla estará comprendida <strong>entre quince y treinta minutos</strong>, en función del número de empresas que la soliciten, y en ella tendrán la posibilidad de exponer a los asistentes el funcionamiento de su empresa y las distintas posibilidades de trabajo que ofrece. Durante este tiempo, el stand permanecerá atendido por los miembros del grupo de trabajo que se asignará a cada empresa participante.</p>
+    </div>
+    <div class="mt-6 rounded-xl border-l-4 border-l-oro bg-oro/10 p-5">
+      <h3 class="font-display text-xl text-azul">Jornada exclusiva en la ETSi</h3>
+      <p class="text-gray-700 mt-2">Adicionalmente, con la participación en ESIEM se ofrece a la empresa la posibilidad de celebrar una jornada exclusiva en la ETSi en la fecha que desee, entre la celebración del Encuentro y la finalización del año. De este modo podrá hacer llegar más información sobre las actividades que desarrolla, qué perfiles busca, realizar talleres o, directamente, presentar su oferta de prácticas o contratos a todos los alumnos de la ETSi.</p>
+    </div>
+  </article>
+
+  <div class="mt-6 grid gap-6 md:grid-cols-2">
+    {# Catering #}
+    <article id="catering" class="card p-6 md:p-8 border-t-4 border-t-oro scroll-mt-24">
+      <h2 class="text-3xl">Catering</h2>
+      <p class="text-gray-700 mt-4">Se servirán cafés por la mañana y un almuerzo para todos los responsables de las empresas que participan en la jornada. A tal efecto, rogamos especifiquen el número de personas de cada empresa que asistirá al Foro.</p>
+    </article>
+
+    {# Coste #}
+    <article id="coste" class="card p-6 md:p-8 border-t-4 border-t-azul scroll-mt-24 flex flex-col">
+      <h2 class="text-3xl">Coste de participación</h2>
+      <p class="text-gray-700 mt-4">En esta edición, el contrato de participación tiene un coste de:</p>
+      <p class="font-display text-4xl text-azul mt-2">{{ event.participation_fee }}</p>
+      <a href="{% url 'accounts:register' %}" class="btn btn-primary mt-6 self-start">Formulario de participación</a>
+    </article>
+  </div>
+
+  {# Contacto #}
+  <article id="contacto" class="card p-6 md:p-8 mt-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-l-8 border-l-oro scroll-mt-24">
+    <div>
+      <p class="text-sm font-bold text-oro uppercase tracking-wider">Contacto institucional</p>
+      <p class="font-display text-2xl mt-1">{{ contact.name }}</p>
+      <p class="text-gray-600">{{ contact.role }}</p>
+    </div>
+    <a href="{{ contact.phone_href }}" class="btn btn-accent self-start sm:self-auto">{{ contact.phone }}</a>
+  </article>
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+{% include 'includes/lightbox.html' %}
+{% endblock %}

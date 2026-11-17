@@ -1,0 +1,17 @@
+{% load static %}
+{% comment %}
+Banner photo with overlaid headline, used at the top of the letter, ETSi and ESIEM pages.
+Params: image (static path), alt, before / highlight / after (headline; `highlight` is shown in gold).
+Each page has its own image file (fig_carta / fig_etsi / fig_esiem) so they can be replaced independently.
+{% endcomment %}
+<figure class="relative mb-10">
+  <img src="{% static image %}" width="1920" height="1080" alt="{{ alt }}"
+       class="w-full aspect-[2/1] object-cover object-[center_45%] rounded-2xl shadow-lg ring-1 ring-black/5">
+  <figcaption class="absolute inset-0 rounded-2xl bg-gradient-to-tr from-azul/90 via-azul/45 to-transparent flex items-end p-5 sm:p-8 md:p-10">
+    <p class="max-w-md text-white drop-shadow-md">
+      <span aria-hidden="true" class="block w-12 h-1 bg-oro rounded-full mb-3 sm:mb-4"></span>
+      <span class="font-display block text-2xl sm:text-4xl md:text-[2.75rem] leading-[1.05]">{{ before }}<span class="text-oro">{{ highlight }}</span>{{ after }}</span>
+    </p>
+  </figcaption>
+  <span aria-hidden="true" class="absolute -bottom-2 left-6 right-6 h-2 rounded-b-xl bg-gradient-to-r from-azul via-rojo to-oro"></span>
+</figure>

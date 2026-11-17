@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Empresas participantes{% endblock %}
+
+{% block content %}
+<section class="max-w-7xl mx-auto px-4 sm:px-6 py-12">
+  <p class="text-sm font-bold text-rojo uppercase tracking-wider">Directorio</p>
+  <h1 class="text-4xl md:text-5xl mt-2">Empresas participantes</h1>
+  <p class="text-gray-600 mt-3 max-w-2xl">Empresas e instituciones que han confirmado su presencia en {{ event.edition_name }}.</p>
+
+  <div class="mt-8 flex flex-col md:flex-row gap-4 md:items-center">
+    <label class="sr-only" for="company-search">Buscar empresa</label>
+    <input id="company-search" type="search" class="input md:max-w-sm" placeholder="Buscar por nombre o descripción…" autocomplete="off">
+    <div id="sector-filters" class="flex flex-wrap gap-2" role="group" aria-label="Filtrar por sector">
+      <button type="button" class="btn btn-sm btn-primary" data-sector="">Todos</button>
+      {% for value, label in sectors %}
+        <button type="button" class="btn btn-sm btn-ghost" data-sector="{{ value }}">{{ label }}</button>
+      {% endfor %}
+    </div>
+  </div>
+  <p id="result-count" class="text-sm text-gray-600 mt-4" aria-live="polite"></p>
+
+  <div id="company-grid" class="mt-4 grid gap-5 sm:grid-cols-2 lg:grid-cols-3"></div>
+  <div id="no-results" class="card p-10 text-center text-gray-600 mt-4" hidden>
+    {% if companies %}No hay empresas que coincidan con la búsqueda.{% else %}Todavía no hay empresas confirmadas para esta edición. ¡Vuelve pronto!{% endif %}
+  </div>
+</section>
+{{ companies|json_script:"companies-data" }}
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/directory.js' %}" defer></script>
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block title %}{{ event.edition_name }}{% endblock %}
+
+{% block content %}
+<section class="max-w-5xl mx-auto px-4 sm:px-6 py-12">
+  {% include 'core/includes/hero_figure.html' with image='img/fig_esiem.jpg' alt='Empresas y estudiantes en los stands de una edición anterior de ESIEM' before='Una jornada para conectar el ' highlight='talento de la ingeniería' after=' con su futuro profesional' %}
+  <p class="text-sm font-bold text-oro uppercase tracking-wider">La jornada</p>
+  <h1 class="text-4xl md:text-5xl mt-2">{{ event.edition_name }}</h1>
+  <p class="text-lg mt-3">
+    {% if event.event_date %}{{ event.event_date|date:"l j \d\e F \d\e Y" }}{% else %}Fecha por confirmar{% endif %}
+    · {{ event.venue }}
+  </p>
+  <p class="text-gray-600 mt-4 max-w-3xl">
+    Una jornada para iniciar relaciones entre empresas y estudiantes de últimos cursos y recién titulados de ingeniería:
+    las empresas presentan su actividad, sus ofertas de empleo y prácticas, y orientan a los estudiantes en su carrera profesional.
+  </p>
+
+  <div class="mt-10 grid gap-6 md:grid-cols-[1.6fr_1fr] items-start">
+    <section class="card p-6">
+      <h2 class="text-2xl">Programa</h2>
+      {% if event.programme_items %}
+        <ol class="timeline mt-6">
+          {% for time, activity in event.programme_items %}
+            <li class="timeline-item">
+              {% if time %}<p class="font-display text-xl text-azul">{{ time }}</p>{% endif %}
+              <p>{{ activity }}</p>
+            </li>
+          {% endfor %}
+        </ol>
+      {% else %}
+        <p class="text-gray-600 mt-3">El programa se publicará próximamente.</p>
+      {% endif %}
+    </section>
+    <aside class="space-y-4">
+      <a href="{% url 'core:exhibitors' %}" class="card p-5 block hover:border-azul transition-colors">
+        <p class="text-sm font-bold text-azul uppercase tracking-wider">Expositores</p>
+        <p class="font-display text-2xl mt-1">Información para expositores →</p>
+        <p class="text-sm text-gray-600 mt-1">Stand, presentaciones y catering</p>
+      </a>
+      <a href="{% url 'accounts:register' %}" class="card p-5 block hover:border-azul transition-colors">
+        <p class="text-sm font-bold text-oro uppercase tracking-wider">Participa</p>
+        <p class="font-display text-2xl mt-1">Formulario de participación →</p>
+        <p class="text-sm text-gray-600 mt-1">Participación: {{ event.participation_fee }}</p>
+      </a>
+      <a href="{% url 'core:directory' %}" class="card p-5 block hover:border-azul transition-colors">
+        <p class="text-sm font-bold text-rojo uppercase tracking-wider">Directorio</p>
+        <p class="font-display text-2xl mt-1">Empresas confirmadas →</p>
+      </a>
+    </aside>
+  </div>
+</section>
+{% endblock %}

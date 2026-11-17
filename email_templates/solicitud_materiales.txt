@@ -1,0 +1,20 @@
+Asunto: {nombre_evento} – Materiales de marca y stand de {nombre_empresa}
+
+Estimado/a {nombre_contacto}:
+
+Estamos preparando los materiales y la distribución de stands de {nombre_evento}. Vuestro stand asignado es: {stand}.
+
+Os agradeceríamos que subierais al portal del expositor, en la pestaña «Dossier y Stand»:
+
+  Para el catálogo:
+  - El logotipo de la empresa.
+  - El dossier corporativo (PDF o DOC).
+  - El anuncio de la empresa para el catálogo.
+
+  Para el stand:
+  - El diseño de la platabanda: el rótulo de la franja superior del frontal del stand (máximo 15 caracteres).
+
+Si necesitáis algo para el stand (enchufes, sillas, conexión Wi-Fi u otras) o tenéis cualquier duda logística, responded a este correo.
+
+Un cordial saludo,
+Comité organizador de {nombre_evento}

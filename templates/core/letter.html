@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Carta de bienvenida{% endblock %}
+
+{% block content %}
+<section class="max-w-5xl mx-auto px-4 sm:px-6 py-12">
+  {% include 'core/includes/hero_figure.html' with image='img/fig_carta.jpg' alt='Estudiantes visitando los stands de las empresas en una edición anterior de ESIEM' before='Participan las ' highlight='Empresas más Significativas' after=' del Sector de la Ingeniería' %}
+  <p class="text-sm font-bold text-oro uppercase tracking-wider">Bienvenida</p>
+  <h1 class="text-4xl md:text-5xl mt-2">Carta del director</h1>
+  <article class="card p-6 md:p-10 mt-8 prose-esiem text-lg">
+    {% if event.director_letter %}
+      {{ event.director_letter|linebreaks }}
+    {% else %}
+      <p>Estimado compañero:</p>
+      <p>Me dirijo a ti para presentarte la nueva edición de la Jornada sobre Ingeniería y Empleo, {{ event.edition_name }}, que este año celebra su vigésimo cuarta edición. El balance muy positivo de las ediciones anteriores, manifestado por las empresas e instituciones participantes, así como la gran acogida que tuvo la jornada por parte de los alumnos, nos ha animado a organizar también este año el evento. {% if event.event_date %}La Jornada se celebra el {{ event.event_date|date:"j \d\e F" }} del año en curso.{% endif %}</p>
+      <p>El objetivo de las jornadas es doble: Por una parte, facilitar un acercamiento de los estudiantes, que próximamente se incorporarán al mercado laboral, a las empresas demandantes de profesionales de la ingeniería. Por otra parte, las jornadas permitirán a las empresas presentarse como una opción laboral atractiva para los estudiantes y, de esta forma, podrán aumentar la base de datos de profesionales para futuras selecciones, facilitando así las tareas de los departamentos de recursos humanos. Las presentaciones que realizan las empresas en el marco de las jornadas tienen un marcado éxito entre nuestros estudiantes, mostrando el interés que tienen por el mundo empresarial al que se integrarán en breve.</p>
+      <p>Como viene sucediendo en años anteriores, y para facilitar la participación de los estudiantes en la Jornada, se suspenden las clases, siendo la participación en {{ event.edition_name }} la actividad académica del día. Aunque la Jornada va destinada a los estudiantes de los últimos cursos de la Escuela, todos tienen la opción de participar activamente en el desarrollo de la misma.</p>
+      <p>Te agradezco sinceramente la atención y apoyo que nos prestas para potenciar la empleabilidad de los alumnos de la Escuela y espero fervientemente que esta jornada vuelva a ser de gran utilidad tanto para tu empresa como para nuestros alumnos.</p>
+      <p>Atentamente.</p>
+    {% endif %}
+    <div class="mt-8 flex items-center gap-4 border-t border-gray-200 pt-6">
+      <img src="{% static 'img/esiem-isotipo.svg' %}" alt="" class="h-12">
+      {% if event.director_signature %}
+        <p class="font-semibold not-italic">{{ event.director_signature }}</p>
+      {% else %}
+        <p class="not-italic"><span class="font-semibold">Andrés Sáez Pérez</span><br><span class="text-base text-gray-600">Director de la Escuela Técnica Superior de Ingeniería</span></p>
+      {% endif %}
+    </div>
+  </article>
+</section>
+{% endblock %}
