@@ -136,15 +136,15 @@ class CompanyScopingTests(ApiTestCase):
     def test_company_user_can_edit_contract_data_and_it_is_logged(self):
         self.client.force_authenticate(self.company_user)
         response = self.client.patch(f'/api/companies/{self.acme.id}/', {
-            'address': 'Calle Nueva 2', 'payment_method': 'cheque', 'name': 'Otro nombre', 'cif': 'X1',
+            'address': 'Calle Nueva 2', 'city': 'Sevilla', 'name': 'Otro nombre', 'cif': 'X1',
         }, format='json')
         self.assertEqual(response.status_code, 200)
         self.acme.refresh_from_db()
-        self.assertEqual((self.acme.address, self.acme.payment_method), ('Calle Nueva 2', 'cheque'))
+        self.assertEqual((self.acme.address, self.acme.city), ('Calle Nueva 2', 'Sevilla'))
         self.assertEqual((self.acme.name, self.acme.cif), ('Acme', ''))
         note = CRMNote.objects.get(company=self.acme)
         self.assertIn('domicilio', note.text)
-        self.assertIn('forma de pago', note.text)
+        self.assertIn('población', note.text)
 
     def test_company_user_cannot_change_status_stand_or_summary(self):
         self.client.force_authenticate(self.company_user)

@@ -55,11 +55,6 @@ class EventSettings(models.Model):
         help_text='Una actividad por línea con el formato «HH:MM | Actividad».',
     )
     participation_fee = models.CharField('coste de participación', max_length=120, default='1.500 € + IVA')
-    payment_instructions = models.TextField(
-        'instrucciones de pago',
-        blank=True,
-        help_text='Datos para la transferencia o el talón (titular, IBAN, concepto…). Se muestran en el formulario de participación.',
-    )
 
     class Meta:
         verbose_name = 'configuración del evento'

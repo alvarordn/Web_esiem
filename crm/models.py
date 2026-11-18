@@ -34,11 +34,6 @@ class EditionModel(models.Model):
         abstract = True
 
 
-class PaymentMethod(models.TextChoices):
-    TRANSFER = 'transfer', 'Transferencia bancaria'
-    CHEQUE = 'cheque', 'Talón bancario'
-
-
 class Company(EditionModel):
     # Companies sign up through the participation form as «Interesada»; the organizers then accept
     # them (portal user created, credentials emailed) or reject them, see crm.api.send_email.
@@ -64,7 +59,6 @@ class Company(EditionModel):
     fax = models.CharField(max_length=40, blank=True)
     signer_name = models.CharField('firmante del contrato', max_length=200, blank=True)
     signer_capacity = models.CharField('calidad en la que firma', max_length=150, blank=True)
-    payment_method = models.CharField('forma de pago', max_length=10, choices=PaymentMethod.choices, blank=True)
     # Portal password sent in the acceptance email, kept so organizers can resend it (on request).
     portal_password = models.CharField('contraseña del portal', max_length=128, blank=True)
 

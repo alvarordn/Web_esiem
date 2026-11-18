@@ -883,9 +883,7 @@
           ${field('Teléfono', 'phone', c.phone)}
           ${field('Fax', 'fax', c.fax)}
           ${field('Firmante del contrato', 'signer_name', c.signer_name)}
-          ${field('Calidad en la que firma', 'signer_capacity', c.signer_capacity)}
-          ${selectField('Forma de pago', 'payment_method', config.paymentMethods, c.payment_method)}
-        </div>
+          ${field('Calidad en la que firma', 'signer_capacity', c.signer_capacity)}        </div>
         <button class="btn btn-primary">Guardar cambios</button>
       </form>`;
   }

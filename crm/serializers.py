@@ -54,7 +54,7 @@ class CompanySerializer(serializers.ModelSerializer):
             'id', 'name', 'cif', 'sector', 'sector_display', 'website', 'summary',
             'status', 'status_display', 'stand_number', 'contacts', 'updated_at',
             'address', 'city', 'postal_code', 'phone', 'fax',
-            'signer_name', 'signer_capacity', 'payment_method', 'portal_access',
+            'signer_name', 'signer_capacity','portal_access',
         ]
 
     def validate_name(self, value):

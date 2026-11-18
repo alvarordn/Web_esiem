@@ -68,13 +68,13 @@ CHAIRS = [
 ]
 
 # Institutional contact, shown in the footer and on the exhibitors page.
-CONTACT = {
-    'name': 'D. Sergio Esteban Roncero',
-    'role': 'Subdirector de Innovación Docente',
-    'phone': '608 745 894',
-    'phone_href': 'tel:+34608745894',
-    'email': 'contacto@esiem.es',  # provisional generic address: confirm the mailbox exists before launch
-}
+# Provisional generic address: confirm the mailbox exists before launch.
+GENERAL_EMAIL = 'contacto@esiem.es'
+
+CONTACT_EMAILS = [
+    {'label': 'Dirección', 'email': 'direccion-esiem-etsi@us.es'},
+    {'label': 'Dudas e información', 'email': GENERAL_EMAIL},
+]
 
 # Icons: simple-icons (CC0) in static/img/redes/; `brand` is the CSS background of the icon tile.
 SOCIAL_LINKS = [

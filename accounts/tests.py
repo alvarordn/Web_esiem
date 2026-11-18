@@ -36,7 +36,6 @@ class RegistrationTests(TestCase):
             'position': 'Directora General',
             'phone': '600000000',
             'email': 'ana@acme.es',
-            'payment_method': 'transfer',
             'accept_privacy': 'on',
         }
         data.update(overrides)
@@ -55,6 +54,8 @@ class RegistrationTests(TestCase):
         self.assertContains(response, 'Datos personales del firmante del contrato')
         self.assertContains(response, 'Nombre de la empresa')
         self.assertNotContains(response, 'Contraseña')
+        self.assertNotContains(response, 'Forma de pago')
+        self.assertContains(response, '1.500 € + IVA')  # the fee is still shown
 
     def test_registration_creates_interested_company_without_user(self):
         self.enter_key()
@@ -65,7 +66,6 @@ class RegistrationTests(TestCase):
         self.assertEqual(company.status, Company.Status.INTERESTED)
         self.assertEqual((company.cif, company.sector, company.postal_code), ('B12345678', 'energia', '41001'))
         self.assertEqual((company.signer_name, company.signer_capacity), ('Ana García', 'Directora General'))
-        self.assertEqual(company.payment_method, 'transfer')
         self.assertFalse(User.objects.exists())
         # Same person as contact and signer: a single primary contact.
         self.assertEqual(company.contacts.get().email, 'ana@acme.es')

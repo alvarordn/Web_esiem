@@ -4,7 +4,7 @@ from django.db import transaction
 from django.utils.crypto import constant_time_compare
 
 from core.models import EventSettings
-from crm.models import Company, CompanyContact, CRMNote, PaymentMethod, Sector
+from crm.models import Company, CompanyContact, CRMNote, Sector
 
 
 def invitation_key_is_valid(key):
@@ -76,7 +76,6 @@ class CompanyRegistrationForm(forms.Form):
     phone = forms.CharField(label='Teléfono', max_length=40, required=False)
     email = forms.EmailField(label='Email')
 
-    payment_method = forms.ChoiceField(label='Forma de pago', choices=PaymentMethod.choices, widget=forms.RadioSelect)
     accept_privacy = forms.BooleanField(label='He leído y acepto la política de privacidad')
 
     ALREADY_REGISTERED = ('Esta empresa ya ha enviado su formulario de participación. '
@@ -119,7 +118,6 @@ class CompanyRegistrationForm(forms.Form):
             fax=data['fax'],
             signer_name=f"{data['first_name']} {data['last_name']}",
             signer_capacity=data['position'],
-            payment_method=data['payment_method'],
         )
         # The designated contact is the primary contact (the acceptance email goes there);
         # the signer is kept as a second contact when it is a different person.

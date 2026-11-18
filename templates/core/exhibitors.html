@@ -86,13 +86,16 @@
   </div>
 
   {# Contacto #}
-  <article id="contacto" class="card p-6 md:p-8 mt-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-l-8 border-l-oro scroll-mt-24">
-    <div>
-      <p class="text-sm font-bold text-oro uppercase tracking-wider">Contacto institucional</p>
-      <p class="font-display text-2xl mt-1">{{ contact.name }}</p>
-      <p class="text-gray-600">{{ contact.role }}</p>
+  <article id="contacto" class="card p-6 md:p-8 mt-6 border-l-8 border-l-oro scroll-mt-24">
+    <p class="text-sm font-bold text-oro uppercase tracking-wider">Contacto</p>
+    <div class="grid sm:grid-cols-2 gap-4 mt-3">
+      {% for c in contact_emails %}
+      <div>
+        <p class="font-display text-2xl">{{ c.label }}</p>
+        <a href="mailto:{{ c.email }}" class="font-semibold text-azul hover:text-oro break-all">{{ c.email }}</a>
+      </div>
+      {% endfor %}
     </div>
-    <a href="{{ contact.phone_href }}" class="btn btn-accent self-start sm:self-auto">{{ contact.phone }}</a>
   </article>
 </section>
 

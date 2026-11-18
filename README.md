@@ -14,7 +14,7 @@ python -m venv .venv
 
 - Web pública: http://127.0.0.1:8000/
 - Área privada (CRM / portal del expositor): http://127.0.0.1:8000/panel/
-- Administración Django (fecha, clave de invitación, carta del director, programa, coste y datos de pago): http://127.0.0.1:8000/admin/
+- Administración Django (fecha, clave de invitación, carta del director, programa y coste): http://127.0.0.1:8000/admin/
 
 `seed_demo` crea 33 empresas confirmadas con sus logos de `estilo/Empresas` y dos usuarios de prueba (se muestran por consola).
 

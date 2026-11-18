@@ -7,7 +7,7 @@ from django.core.exceptions import PermissionDenied
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import Company, CRMNote, PaymentMethod, Sector
+from .models import Company, CRMNote, Sector
 
 
 def _static_version(path):
@@ -35,7 +35,6 @@ def panel(request):
             'companyId': int(initial_company) if str(initial_company or '').isdigit() else None,
             'sectors': Sector.choices,
             'statuses': Company.Status.choices,
-            'paymentMethods': [('', '—')] + PaymentMethod.choices,
             'noteKinds': [c for c in CRMNote.Kind.choices if c[0] != CRMNote.Kind.SYSTEM],
         },
     })

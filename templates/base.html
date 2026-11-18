@@ -65,10 +65,11 @@
         <p class="text-sm mt-1">Encuentro Sobre Ingeniería y Empleo</p>
         <p class="text-sm mt-3">{{ event.venue }}</p>
         <p class="text-sm mt-4">
-          <span class="font-semibold text-white">Contacto:</span> {{ contact.name }}<br>
-          <span class="text-gray-400">{{ contact.role }}</span><br>
-          <a class="inline-block mt-1 font-semibold text-oro hover:text-white" href="{{ contact.phone_href }}">Tel. {{ contact.phone }}</a>
-          {% if contact.email %}<br><a class="inline-block mt-1 font-semibold text-oro hover:text-white break-all" href="mailto:{{ contact.email }}">{{ contact.email }}</a>{% endif %}
+          <span class="font-semibold text-white">Contacto</span>
+          {% for c in contact_emails %}
+          <br><span class="text-gray-400">{{ c.label }}:</span>
+          <a class="font-semibold text-oro hover:text-white break-all" href="mailto:{{ c.email }}">{{ c.email }}</a>
+          {% endfor %}
         </p>
       </div>
       <div class="text-sm space-y-2">

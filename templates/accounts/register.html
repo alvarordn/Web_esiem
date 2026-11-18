@@ -6,12 +6,9 @@
   <p class="text-sm font-bold text-oro uppercase tracking-wider">Empresas{% if step != 'done' %} · Paso {% if step == 'key' %}1{% else %}2{% endif %} de 2{% endif %}</p>
   <h1 class="text-4xl md:text-5xl mt-2">Formulario de participación</h1>
 
-  <aside class="card p-5 mt-6 border-l-8 border-l-oro flex flex-col sm:flex-row sm:items-center gap-4 justify-between">
-    <div>
-      <p class="text-sm font-bold uppercase tracking-wider text-gray-500">Costes · empresas participantes</p>
-      <p class="font-display text-3xl text-azul">{{ event.participation_fee }}</p>
-    </div>
-    <p class="text-sm text-gray-600 sm:max-w-xs">Pago mediante transferencia bancaria o talón bancario.{% if event.payment_instructions %} Los datos de pago aparecen al final del formulario.{% endif %}</p>
+  <aside class="card p-5 mt-6 border-l-8 border-l-oro">
+    <p class="text-sm font-bold uppercase tracking-wider text-gray-500">Costes · empresas participantes</p>
+    <p class="font-display text-3xl text-azul">{{ event.participation_fee }}</p>
   </aside>
 
   {% if step == 'done' %}
@@ -28,6 +25,7 @@
       {% include 'includes/form_field.html' with field=form.invitation_key %}
       <button class="btn btn-primary w-full sm:w-auto">Continuar</button>
     </form>
+    <div class="mt-8">{% include 'core/includes/participation_cta.html' %}</div>
   {% else %}
     <p class="text-gray-600 mt-6">Completa los datos de tu empresa y del contrato de participación. La organización revisará la solicitud y os responderá por correo; si se acepta, recibiréis el usuario y la contraseña del portal del expositor.</p>
     <form method="post" class="card p-6 md:p-8 mt-6" novalidate>
@@ -60,15 +58,6 @@
         {% include 'includes/form_field.html' with field=form.position %}
         {% include 'includes/form_field.html' with field=form.phone %}
         <div class="sm:col-span-2">{% include 'includes/form_field.html' with field=form.email %}</div>
-      </fieldset>
-
-      <fieldset class="mt-8">
-        <legend class="font-display text-2xl text-azul mb-2">Pago</legend>
-        <p class="text-gray-700">Importe de participación: <strong>{{ event.participation_fee }}</strong></p>
-        <div class="mt-3">{% include 'includes/form_field.html' with field=form.payment_method %}</div>
-        {% if event.payment_instructions %}
-          <div class="mt-4 p-4 rounded-lg bg-gray-50 border border-gray-200 text-sm whitespace-pre-line">{{ event.payment_instructions }}</div>
-        {% endif %}
       </fieldset>
 
       <div class="mt-8">{% include 'includes/form_field.html' with field=form.accept_privacy %}</div>
