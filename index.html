@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ESIEM 2027 · Encuentro Sobre Ingeniería y Empleo</title>
+  <meta name="description" content="ESIEM, el Encuentro Sobre Ingeniería y Empleo de la ETSi de la Universidad de Sevilla.">
+  <link rel="icon" type="image/svg+xml" href="./static/img/esiem-isotipo.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:ital,wght@1,600;1,700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.1.11"></script>
+  <style type="text/tailwindcss">
+    @theme {
+      --color-oro: #D99309;
+      --color-rojo: #921D1A;
+      --color-azul: #002F7D;
+      --color-azul-oscuro: #00225c;
+      --font-display: 'Myriad Pro', 'Barlow Semi Condensed', 'Arial Narrow', sans-serif;
+    }
+  </style>
+  <link rel="stylesheet" href="./static/css/esiem.css?v=1794560191">
+  
+</head>
+<body class="min-h-screen flex flex-col">
+  <div class="brand-stripe"></div>
+  <header class="bg-white border-b border-gray-200 sticky top-0 z-40">
+    <nav class="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
+      <a href="./" class="flex items-center gap-3 shrink-0" aria-label="Inicio ESIEM">
+        <img src="./static/img/esiem-isotipo.svg" alt="" class="h-10 w-auto">
+        <span class="font-display text-2xl text-[#1d1d1b]">ESIEM</span>
+      </a>
+      <button type="button" class="xl:hidden btn btn-ghost btn-sm" id="nav-toggle" aria-expanded="false" aria-controls="nav-menu">Menú</button>
+      <div id="nav-menu" class="hidden xl:flex absolute xl:static top-16 left-0 right-0 bg-white xl:bg-transparent border-b xl:border-0 border-gray-200 flex-col xl:flex-row xl:items-center gap-1 xl:gap-4 p-4 xl:p-0 font-semibold text-[14px]">
+        
+          <a class="py-2 whitespace-nowrap hover:text-azul text-azul" href="./" aria-current="page">Inicio</a>
+        
+          <a class="py-2 whitespace-nowrap hover:text-azul " href="./carta/">Carta del director</a>
+        
+          <a class="py-2 whitespace-nowrap hover:text-azul " href="./etsi/">ETSi</a>
+        
+          <a class="py-2 whitespace-nowrap hover:text-azul " href="./esiem/">ESIEM 2027</a>
+        
+          <a class="py-2 whitespace-nowrap hover:text-azul " href="./expositores/">Expositores</a>
+        
+          <a class="py-2 whitespace-nowrap hover:text-azul " href="./empresas/">Empresas</a>
+        
+          <a class="py-2 whitespace-nowrap hover:text-azul " href="./catedras/">Cátedras</a>
+        
+          <a class="py-2 whitespace-nowrap hover:text-azul " href="./organizadores/">Organizadores</a>
+        
+          <a class="py-2 whitespace-nowrap hover:text-azul " href="./siguenos/">Síguenos</a>
+        
+        
+        
+      </div>
+    </nav>
+  </header>
+
+  
+
+  <main class="flex-1">
+<section class="relative overflow-hidden bg-azul text-white">
+  <img src="./static/img/esiem-isotipo.svg" alt="" aria-hidden="true" class="absolute -right-24 -bottom-24 w-[420px] md:w-[560px] opacity-15 pointer-events-none select-none">
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 py-16 md:py-24">
+    <p class="uppercase tracking-[.2em] text-oro font-bold text-sm">Encuentro Sobre Ingeniería y Empleo</p>
+    <h1 class="text-5xl md:text-7xl mt-3">ESIEM 2027</h1>
+    <p class="mt-4 text-lg md:text-xl max-w-2xl text-blue-100">
+      La feria de empleo y talento de la Escuela Técnica Superior de Ingeniería de la Universidad de Sevilla.
+    </p>
+    <p class="mt-6 text-lg font-semibold">
+      jueves 11 de marzo de 2027
+      <span class="opacity-70 font-normal">· ETSi, Universidad de Sevilla</span>
+    </p>
+
+    
+    <div id="countdown" class="mt-8 flex flex-wrap gap-3" data-target="2027-03-11T10:00:00+01:00" aria-live="polite">
+      <div class="countdown-unit"><strong data-unit="days">--</strong><span>días</span></div>
+      <div class="countdown-unit"><strong data-unit="hours">--</strong><span>horas</span></div>
+      <div class="countdown-unit"><strong data-unit="minutes">--</strong><span>minutos</span></div>
+      <div class="countdown-unit"><strong data-unit="seconds">--</strong><span>segundos</span></div>
+    </div>
+    <p id="countdown-done" class="mt-8 text-2xl font-display text-oro" hidden>¡El encuentro ya ha comenzado!</p>
+    
+
+    <div class="mt-10 flex flex-wrap gap-3">
+      <a href="./empresas/" class="btn btn-accent">Ver empresas participantes</a>
+      <a href="./carta/" class="btn border-white/40 text-white hover:bg-white/10">Carta del director</a>
+      
+    </div>
+  </div>
+</section>
+
+<section class="max-w-7xl mx-auto px-4 sm:px-6 -mt-8 relative">
+  <div class="card grid grid-cols-2 md:grid-cols-4 divide-x divide-y md:divide-y-0 divide-gray-200 overflow-hidden">
+    
+      <div class="p-6 text-center">
+        <p class="font-display text-4xl text-oro">+4.000</p>
+        <p class="text-sm text-gray-600 mt-1">estudiantes potenciales asistentes a la feria</p>
+      </div>
+    
+      <div class="p-6 text-center">
+        <p class="font-display text-4xl text-azul">+60</p>
+        <p class="text-sm text-gray-600 mt-1">años de historia de la ETSi</p>
+      </div>
+    
+      <div class="p-6 text-center">
+        <p class="font-display text-4xl text-rojo">+5.500</p>
+        <p class="text-sm text-gray-600 mt-1">estudiantes en la ETSi</p>
+      </div>
+    
+      <div class="p-6 text-center">
+        <p class="font-display text-4xl text-azul">+500</p>
+        <p class="text-sm text-gray-600 mt-1">profesores</p>
+      </div>
+    
+  </div>
+</section>
+
+<section class="max-w-7xl mx-auto px-4 sm:px-6 mt-16 grid gap-6 md:grid-cols-3">
+  <a href="./esiem/" class="card p-6 hover:border-azul transition-colors group">
+    <p class="text-sm font-bold text-oro uppercase tracking-wider">La jornada</p>
+    <h2 class="text-2xl mt-2 group-hover:text-azul">Programa de ESIEM 2027</h2>
+    <p class="text-gray-600 mt-2">Stands de empresas, presentaciones y mesas redondas durante toda la jornada.</p>
+  </a>
+  <a href="./empresas/" class="card p-6 hover:border-azul transition-colors group">
+    <p class="text-sm font-bold text-rojo uppercase tracking-wider">Directorio</p>
+    <h2 class="text-2xl mt-2 group-hover:text-azul">Empresas expositoras</h2>
+    <p class="text-gray-600 mt-2">Filtra por sector y descubre qué empresas estarán presentes este año.</p>
+  </a>
+  <a href="./carta/" class="card p-6 hover:border-azul transition-colors group">
+    <p class="text-sm font-bold text-azul uppercase tracking-wider">Bienvenida</p>
+    <h2 class="text-2xl mt-2 group-hover:text-azul">Carta del director</h2>
+    <p class="text-gray-600 mt-2">Los objetivos y valores que guían el encuentro entre empresas y talento de ingeniería.</p>
+  </a>
+</section>
+
+
+
+
+
+<section class="max-w-7xl mx-auto px-4 sm:px-6 mt-16">
+  <div class="flex items-end justify-between gap-4">
+    <h2 class="text-3xl">Organizadores</h2>
+    <a href="./organizadores/" class="text-azul font-semibold hover:underline">Más →</a>
+  </div>
+  
+<div class="mt-6 grid grid-cols-2 lg:grid-cols-4 gap-3">
+  
+    <a href="https://www.etsi.us.es" target="_blank" rel="noopener noreferrer" class="card logo-tile h-28 hover:border-azul transition-colors" title="ETSi · Universidad de Sevilla">
+      <img src="./static/img/etsi.jpg" alt="ETSi · Universidad de Sevilla" loading="lazy">
+    </a>
+  
+    <a href="https://www.estiem.org" target="_blank" rel="noopener noreferrer" class="card logo-tile h-28 hover:border-azul transition-colors" title="ESTIEM Local Group Seville">
+      <img src="./static/img/organizadores/estiem-sevilla.png" alt="ESTIEM Local Group Seville" loading="lazy">
+    </a>
+  
+    <a href="https://sevilla.euroavia.eu" target="_blank" rel="noopener noreferrer" class="card logo-tile h-28 hover:border-azul transition-colors" title="EUROAVIA Sevilla">
+      <img src="./static/img/organizadores/euroavia-sevilla.png" alt="EUROAVIA Sevilla" loading="lazy">
+    </a>
+  
+    <a href="https://vantusteam.com/" target="_blank" rel="noopener noreferrer" class="card logo-tile h-28 hover:border-azul transition-colors" title="Vantus">
+      <img src="./static/img/organizadores/vantus.svg" alt="Vantus" loading="lazy">
+    </a>
+  
+</div>
+
+</section>
+</main>
+
+  
+  <footer class="bg-[#0f1b33] text-gray-300 mt-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-10 grid gap-8 md:grid-cols-4">
+      <div>
+        <p class="font-display text-2xl text-white">ESIEM</p>
+        <p class="text-sm mt-1">Encuentro Sobre Ingeniería y Empleo</p>
+        <p class="text-sm mt-3">ETSi, Universidad de Sevilla</p>
+        <p class="text-sm mt-4">
+          <span class="font-semibold text-white">Contacto:</span> D. Sergio Esteban Roncero<br>
+          <span class="text-gray-400">Subdirector de Innovación Docente</span><br>
+          <a class="inline-block mt-1 font-semibold text-oro hover:text-white" href="tel:+34608745894">Tel. 608 745 894</a>
+          <br><a class="inline-block mt-1 font-semibold text-oro hover:text-white break-all" href="mailto:contacto@esiem.es">contacto@esiem.es</a>
+        </p>
+      </div>
+      <div class="text-sm space-y-2">
+        <p class="font-semibold text-white">El encuentro</p>
+        <a class="block hover:text-white" href="./esiem/">ESIEM 2027</a>
+        <a class="block hover:text-white" href="./empresas/">Empresas participantes</a>
+        
+      </div>
+      <div class="text-sm space-y-2">
+        <p class="font-semibold text-white">Síguenos</p>
+        
+          <a class="block hover:text-white" href="https://www.instagram.com/esiem_etsi/" target="_blank" rel="noopener noreferrer">Instagram</a>
+        
+          <a class="block hover:text-white" href="https://www.linkedin.com/company/esiem/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        
+          <a class="block hover:text-white" href="https://x.com/esiem_etsi" target="_blank" rel="noopener noreferrer">X (Twitter)</a>
+        
+      </div>
+      <div class="text-sm space-y-2">
+        <p class="font-semibold text-white">Legal</p>
+        <a class="block hover:text-white" href="./legal/aviso-legal/">Aviso legal</a>
+        <a class="block hover:text-white" href="./legal/privacidad/">Privacidad</a>
+        <a class="block hover:text-white" href="./legal/cookies/">Cookies</a>
+      </div>
+    </div>
+    <div class="brand-stripe"></div>
+  </footer>
+  
+
+  <div id="cookie-banner" class="fixed bottom-0 inset-x-0 z-50 bg-white border-t border-gray-200 shadow-lg" hidden>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-col sm:flex-row gap-3 sm:items-center justify-between text-sm">
+      <p>Usamos únicamente cookies técnicas necesarias para el funcionamiento de la web (sesión y seguridad). <a class="text-azul underline" href="./legal/cookies/">Más información</a>.</p>
+      <button type="button" class="btn btn-primary btn-sm" id="cookie-accept">Entendido</button>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var toggle = document.getElementById('nav-toggle');
+      var menu = document.getElementById('nav-menu');
+      toggle.addEventListener('click', function () {
+        var open = menu.classList.toggle('hidden') === false;
+        menu.classList.toggle('flex', open);
+        toggle.setAttribute('aria-expanded', String(open));
+      });
+      var banner = document.getElementById('cookie-banner');
+      var seen = false;
+      try { seen = localStorage.getItem('esiem-cookies') === '1'; } catch (e) {}
+      if (!seen) banner.hidden = false;
+      document.getElementById('cookie-accept').addEventListener('click', function () {
+        try { localStorage.setItem('esiem-cookies', '1'); } catch (e) {}
+        banner.hidden = true;
+      });
+    })();
+  </script>
+  
+<script src="./static/js/countdown.js" defer></script>
+
+</body>
+</html>

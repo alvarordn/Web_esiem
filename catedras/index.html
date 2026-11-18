@@ -1,0 +1,416 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cátedras · Encuentro Sobre Ingeniería y Empleo</title>
+  <meta name="description" content="ESIEM, el Encuentro Sobre Ingeniería y Empleo de la ETSi de la Universidad de Sevilla.">
+  <link rel="icon" type="image/svg+xml" href="../static/img/esiem-isotipo.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:ital,wght@1,600;1,700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.1.11"></script>
+  <style type="text/tailwindcss">
+    @theme {
+      --color-oro: #D99309;
+      --color-rojo: #921D1A;
+      --color-azul: #002F7D;
+      --color-azul-oscuro: #00225c;
+      --font-display: 'Myriad Pro', 'Barlow Semi Condensed', 'Arial Narrow', sans-serif;
+    }
+  </style>
+  <link rel="stylesheet" href="../static/css/esiem.css?v=1794560191">
+  
+</head>
+<body class="min-h-screen flex flex-col">
+  <div class="brand-stripe"></div>
+  <header class="bg-white border-b border-gray-200 sticky top-0 z-40">
+    <nav class="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
+      <a href="../" class="flex items-center gap-3 shrink-0" aria-label="Inicio ESIEM">
+        <img src="../static/img/esiem-isotipo.svg" alt="" class="h-10 w-auto">
+        <span class="font-display text-2xl text-[#1d1d1b]">ESIEM</span>
+      </a>
+      <button type="button" class="xl:hidden btn btn-ghost btn-sm" id="nav-toggle" aria-expanded="false" aria-controls="nav-menu">Menú</button>
+      <div id="nav-menu" class="hidden xl:flex absolute xl:static top-16 left-0 right-0 bg-white xl:bg-transparent border-b xl:border-0 border-gray-200 flex-col xl:flex-row xl:items-center gap-1 xl:gap-4 p-4 xl:p-0 font-semibold text-[14px]">
+        
+          <a class="py-2 whitespace-nowrap hover:text-azul " href="../">Inicio</a>
+        
+          <a class="py-2 whitespace-nowrap hover:text-azul " href="../carta/">Carta del director</a>
+        
+          <a class="py-2 whitespace-nowrap hover:text-azul " href="../etsi/">ETSi</a>
+        
+          <a class="py-2 whitespace-nowrap hover:text-azul " href="../esiem/">ESIEM 2027</a>
+        
+          <a class="py-2 whitespace-nowrap hover:text-azul " href="../expositores/">Expositores</a>
+        
+          <a class="py-2 whitespace-nowrap hover:text-azul " href="../empresas/">Empresas</a>
+        
+          <a class="py-2 whitespace-nowrap hover:text-azul text-azul" href="../catedras/" aria-current="page">Cátedras</a>
+        
+          <a class="py-2 whitespace-nowrap hover:text-azul " href="../organizadores/">Organizadores</a>
+        
+          <a class="py-2 whitespace-nowrap hover:text-azul " href="../siguenos/">Síguenos</a>
+        
+        
+        
+      </div>
+    </nav>
+  </header>
+
+  
+
+  <main class="flex-1">
+<section class="max-w-7xl mx-auto px-4 sm:px-6 py-12">
+  <p class="text-sm font-bold text-rojo uppercase tracking-wider">Empresa y universidad</p>
+  <h1 class="text-4xl md:text-5xl mt-2">Cátedras de empresa</h1>
+  <div class="mt-4 grid gap-6 lg:grid-cols-[1fr_auto] lg:items-end">
+    <div class="text-gray-600 max-w-3xl space-y-3">
+      <p>
+        Las cátedras de empresa son una vía para fomentar la relación entre las empresas y la investigación y el
+        conocimiento de la Universidad de Sevilla: impulsan la transferencia de conocimiento mediante la innovación y la
+        investigación, y contribuyen a formar a los futuros profesionales en las áreas de interés de cada cátedra.
+      </p>
+      <p>Su creación se promueve desde la Universidad de Sevilla y su Consejo Social mediante convenios y patrocinios con las empresas.</p>
+    </div>
+    <p class="font-display text-5xl text-oro lg:text-right">20<span class="block text-base font-sans not-italic font-semibold text-gray-600">cátedras en la ETSi</span></p>
+  </div>
+
+  <div class="mt-8 grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+    
+      <a href="https://etsi.us.es/empresas-practicas/catedras/catedra-inerco" target="_blank" rel="noopener noreferrer"
+         class="card group overflow-hidden flex flex-col hover:border-azul hover:shadow-md transition">
+        <div class="logo-tile h-32 sm:h-36 p-4 border-b border-gray-200 bg-white">
+          
+            <img src="../static/img/catedras/inerco.png" alt="Logotipo de la Cátedra INERCO" loading="lazy" class="transition-transform group-hover:scale-105">
+          
+        </div>
+        <div class="p-4 flex-1 flex flex-col justify-between gap-2">
+          <h2 class="text-base sm:text-lg leading-snug group-hover:text-azul">Cátedra INERCO</h2>
+          <span class="text-sm font-semibold text-azul opacity-70 group-hover:opacity-100">Más información ↗</span>
+        </div>
+      </a>
+    
+      <a href="https://etsi.us.es/empresas-practicas/catedras/catedra-endesa-red" target="_blank" rel="noopener noreferrer"
+         class="card group overflow-hidden flex flex-col hover:border-azul hover:shadow-md transition">
+        <div class="logo-tile h-32 sm:h-36 p-4 border-b border-gray-200 bg-white">
+          
+            <img src="../static/img/catedras/endesa-red.png" alt="Logotipo de la Cátedra ENDESA RED" loading="lazy" class="transition-transform group-hover:scale-105">
+          
+        </div>
+        <div class="p-4 flex-1 flex flex-col justify-between gap-2">
+          <h2 class="text-base sm:text-lg leading-snug group-hover:text-azul">Cátedra ENDESA RED</h2>
+          <span class="text-sm font-semibold text-azul opacity-70 group-hover:opacity-100">Más información ↗</span>
+        </div>
+      </a>
+    
+      <a href="https://etsi.us.es/empresas-practicas/catedras/catedra-mp" target="_blank" rel="noopener noreferrer"
+         class="card group overflow-hidden flex flex-col hover:border-azul hover:shadow-md transition">
+        <div class="logo-tile h-32 sm:h-36 p-4 border-b border-gray-200 bg-white">
+          
+            <img src="../static/img/catedras/mp.png" alt="Logotipo de la Cátedra MP" loading="lazy" class="transition-transform group-hover:scale-105">
+          
+        </div>
+        <div class="p-4 flex-1 flex flex-col justify-between gap-2">
+          <h2 class="text-base sm:text-lg leading-snug group-hover:text-azul">Cátedra MP</h2>
+          <span class="text-sm font-semibold text-azul opacity-70 group-hover:opacity-100">Más información ↗</span>
+        </div>
+      </a>
+    
+      <a href="https://etsi.us.es/empresas-practicas/catedras/catedra-aeroespacial-airbus-group" target="_blank" rel="noopener noreferrer"
+         class="card group overflow-hidden flex flex-col hover:border-azul hover:shadow-md transition">
+        <div class="logo-tile h-32 sm:h-36 p-4 border-b border-gray-200 bg-white">
+          
+            <img src="../static/img/catedras/airbus.png" alt="Logotipo de la Cátedra Aeroespacial AIRBUS GROUP" loading="lazy" class="transition-transform group-hover:scale-105">
+          
+        </div>
+        <div class="p-4 flex-1 flex flex-col justify-between gap-2">
+          <h2 class="text-base sm:text-lg leading-snug group-hover:text-azul">Cátedra Aeroespacial AIRBUS GROUP</h2>
+          <span class="text-sm font-semibold text-azul opacity-70 group-hover:opacity-100">Más información ↗</span>
+        </div>
+      </a>
+    
+      <a href="https://etsi.us.es/empresas-practicas/catedras/catedra-de-prevencion-de-riesgos-laborales-prl" target="_blank" rel="noopener noreferrer"
+         class="card group overflow-hidden flex flex-col hover:border-azul hover:shadow-md transition">
+        <div class="logo-tile h-32 sm:h-36 p-4 border-b border-gray-200 bg-white">
+          
+            <img src="../static/img/catedras/prl.png" alt="Logotipo de la Cátedra de Prevención de Riesgos Laborales PRL" loading="lazy" class="transition-transform group-hover:scale-105">
+          
+        </div>
+        <div class="p-4 flex-1 flex flex-col justify-between gap-2">
+          <h2 class="text-base sm:text-lg leading-snug group-hover:text-azul">Cátedra de Prevención de Riesgos Laborales PRL</h2>
+          <span class="text-sm font-semibold text-azul opacity-70 group-hover:opacity-100">Más información ↗</span>
+        </div>
+      </a>
+    
+      <a href="https://etsi.us.es/empresas-practicas/catedras/catedra-cepsa-energia" target="_blank" rel="noopener noreferrer"
+         class="card group overflow-hidden flex flex-col hover:border-azul hover:shadow-md transition">
+        <div class="logo-tile h-32 sm:h-36 p-4 border-b border-gray-200 bg-white">
+          
+            <img src="../static/img/catedras/moeve.jpg" alt="Logotipo de la Cátedra Moeve Energía" loading="lazy" class="transition-transform group-hover:scale-105">
+          
+        </div>
+        <div class="p-4 flex-1 flex flex-col justify-between gap-2">
+          <h2 class="text-base sm:text-lg leading-snug group-hover:text-azul">Cátedra Moeve Energía</h2>
+          <span class="text-sm font-semibold text-azul opacity-70 group-hover:opacity-100">Más información ↗</span>
+        </div>
+      </a>
+    
+      <a href="https://etsi.us.es/empresas-practicas/catedras/catedra-alter-technology" target="_blank" rel="noopener noreferrer"
+         class="card group overflow-hidden flex flex-col hover:border-azul hover:shadow-md transition">
+        <div class="logo-tile h-32 sm:h-36 p-4 border-b border-gray-200 bg-white">
+          
+            <img src="../static/img/catedras/alter-technology.png" alt="Logotipo de la Cátedra Alter Technology" loading="lazy" class="transition-transform group-hover:scale-105">
+          
+        </div>
+        <div class="p-4 flex-1 flex flex-col justify-between gap-2">
+          <h2 class="text-base sm:text-lg leading-snug group-hover:text-azul">Cátedra Alter Technology</h2>
+          <span class="text-sm font-semibold text-azul opacity-70 group-hover:opacity-100">Más información ↗</span>
+        </div>
+      </a>
+    
+      <a href="https://etsi.us.es/empresas-practicas/catedras/catedra-del-agua-de-emasesa" target="_blank" rel="noopener noreferrer"
+         class="card group overflow-hidden flex flex-col hover:border-azul hover:shadow-md transition">
+        <div class="logo-tile h-32 sm:h-36 p-4 border-b border-gray-200 bg-white">
+          
+            <img src="../static/img/catedras/emasesa.png" alt="Logotipo de la Cátedra del Agua de EMASESA" loading="lazy" class="transition-transform group-hover:scale-105">
+          
+        </div>
+        <div class="p-4 flex-1 flex flex-col justify-between gap-2">
+          <h2 class="text-base sm:text-lg leading-snug group-hover:text-azul">Cátedra del Agua de EMASESA</h2>
+          <span class="text-sm font-semibold text-azul opacity-70 group-hover:opacity-100">Más información ↗</span>
+        </div>
+      </a>
+    
+      <a href="https://etsi.us.es/empresas-practicas/catedras/catedra-economia-circular" target="_blank" rel="noopener noreferrer"
+         class="card group overflow-hidden flex flex-col hover:border-azul hover:shadow-md transition">
+        <div class="logo-tile h-32 sm:h-36 p-4 border-b border-gray-200 bg-white">
+          
+            <img src="../static/img/catedras/economia-circular.svg" alt="Logotipo de la Cátedra Economía Circular" loading="lazy" class="transition-transform group-hover:scale-105">
+          
+        </div>
+        <div class="p-4 flex-1 flex flex-col justify-between gap-2">
+          <h2 class="text-base sm:text-lg leading-snug group-hover:text-azul">Cátedra Economía Circular</h2>
+          <span class="text-sm font-semibold text-azul opacity-70 group-hover:opacity-100">Más información ↗</span>
+        </div>
+      </a>
+    
+      <a href="https://etsi.us.es/empresas-practicas/catedras/catedra-de-lot-internet-de-las-cosas_" target="_blank" rel="noopener noreferrer"
+         class="card group overflow-hidden flex flex-col hover:border-azul hover:shadow-md transition">
+        <div class="logo-tile h-32 sm:h-36 p-4 border-b border-gray-200 bg-white">
+          
+            <img src="../static/img/catedras/iot.jpg" alt="Logotipo de la Cátedra de IoT (Internet de las Cosas)" loading="lazy" class="transition-transform group-hover:scale-105">
+          
+        </div>
+        <div class="p-4 flex-1 flex flex-col justify-between gap-2">
+          <h2 class="text-base sm:text-lg leading-snug group-hover:text-azul">Cátedra de IoT (Internet de las Cosas)</h2>
+          <span class="text-sm font-semibold text-azul opacity-70 group-hover:opacity-100">Más información ↗</span>
+        </div>
+      </a>
+    
+      <a href="https://etsi.us.es/empresas-practicas/catedras/catedra-de-ingenieria-y-modelos-de-negocio" target="_blank" rel="noopener noreferrer"
+         class="card group overflow-hidden flex flex-col hover:border-azul hover:shadow-md transition">
+        <div class="logo-tile h-32 sm:h-36 p-4 border-b border-gray-200 bg-white">
+          
+            <img src="../static/img/catedras/ingenieria-modelos-negocio.jpg" alt="Logotipo de la Cátedra de Ingeniería y Modelos de Negocio" loading="lazy" class="transition-transform group-hover:scale-105">
+          
+        </div>
+        <div class="p-4 flex-1 flex flex-col justify-between gap-2">
+          <h2 class="text-base sm:text-lg leading-snug group-hover:text-azul">Cátedra de Ingeniería y Modelos de Negocio</h2>
+          <span class="text-sm font-semibold text-azul opacity-70 group-hover:opacity-100">Más información ↗</span>
+        </div>
+      </a>
+    
+      <a href="https://etsi.us.es/empresas-practicas/catedras/catedra-INDRA-Vigilancia-Espacial" target="_blank" rel="noopener noreferrer"
+         class="card group overflow-hidden flex flex-col hover:border-azul hover:shadow-md transition">
+        <div class="logo-tile h-32 sm:h-36 p-4 border-b border-gray-200 bg-white">
+          
+            <img src="../static/img/catedras/indra.png" alt="Logotipo de la Cátedra INDRA de Vigilancia Espacial" loading="lazy" class="transition-transform group-hover:scale-105">
+          
+        </div>
+        <div class="p-4 flex-1 flex flex-col justify-between gap-2">
+          <h2 class="text-base sm:text-lg leading-snug group-hover:text-azul">Cátedra INDRA de Vigilancia Espacial</h2>
+          <span class="text-sm font-semibold text-azul opacity-70 group-hover:opacity-100">Más información ↗</span>
+        </div>
+      </a>
+    
+      <a href="https://etsi.us.es/empresas-practicas/catedras/catedra-hitachi-energy" target="_blank" rel="noopener noreferrer"
+         class="card group overflow-hidden flex flex-col hover:border-azul hover:shadow-md transition">
+        <div class="logo-tile h-32 sm:h-36 p-4 border-b border-gray-200 bg-white">
+          
+            <img src="../static/img/catedras/hitachi-energy.png" alt="Logotipo de la Cátedra Hitachi Energy" loading="lazy" class="transition-transform group-hover:scale-105">
+          
+        </div>
+        <div class="p-4 flex-1 flex flex-col justify-between gap-2">
+          <h2 class="text-base sm:text-lg leading-snug group-hover:text-azul">Cátedra Hitachi Energy</h2>
+          <span class="text-sm font-semibold text-azul opacity-70 group-hover:opacity-100">Más información ↗</span>
+        </div>
+      </a>
+    
+      <a href="https://etsi.us.es/empresas-practicas/catedras/catedra-hitachi-energy-PCS" target="_blank" rel="noopener noreferrer"
+         class="card group overflow-hidden flex flex-col hover:border-azul hover:shadow-md transition">
+        <div class="logo-tile h-32 sm:h-36 p-4 border-b border-gray-200 bg-white">
+          
+            <img src="../static/img/catedras/hitachi-energy-pcs.png" alt="Logotipo de la Cátedra Hitachi Energy PCS" loading="lazy" class="transition-transform group-hover:scale-105">
+          
+        </div>
+        <div class="p-4 flex-1 flex flex-col justify-between gap-2">
+          <h2 class="text-base sm:text-lg leading-snug group-hover:text-azul">Cátedra Hitachi Energy PCS</h2>
+          <span class="text-sm font-semibold text-azul opacity-70 group-hover:opacity-100">Más información ↗</span>
+        </div>
+      </a>
+    
+      <a href="https://etsi.us.es/empresas-practicas/catedras/catedra-de-ciberseguridad-y-ciberinteligencia-beonesec" target="_blank" rel="noopener noreferrer"
+         class="card group overflow-hidden flex flex-col hover:border-azul hover:shadow-md transition">
+        <div class="logo-tile h-32 sm:h-36 p-4 border-b border-gray-200 bg-white">
+          
+            <img src="../static/img/catedras/beonesec.png" alt="Logotipo de la Cátedra de Ciberseguridad y Ciberinteligencia BeOneSec" loading="lazy" class="transition-transform group-hover:scale-105">
+          
+        </div>
+        <div class="p-4 flex-1 flex flex-col justify-between gap-2">
+          <h2 class="text-base sm:text-lg leading-snug group-hover:text-azul">Cátedra de Ciberseguridad y Ciberinteligencia BeOneSec</h2>
+          <span class="text-sm font-semibold text-azul opacity-70 group-hover:opacity-100">Más información ↗</span>
+        </div>
+      </a>
+    
+      <a href="https://etsi.us.es/empresas-practicas/catedras/catedra_schneider_electric" target="_blank" rel="noopener noreferrer"
+         class="card group overflow-hidden flex flex-col hover:border-azul hover:shadow-md transition">
+        <div class="logo-tile h-32 sm:h-36 p-4 border-b border-gray-200 bg-white">
+          
+            <img src="../static/img/catedras/schneider.png" alt="Logotipo de la Cátedra Schneider Electric: Digitalización e inteligencia artificial industrial" loading="lazy" class="transition-transform group-hover:scale-105">
+          
+        </div>
+        <div class="p-4 flex-1 flex flex-col justify-between gap-2">
+          <h2 class="text-base sm:text-lg leading-snug group-hover:text-azul">Cátedra Schneider Electric: Digitalización e inteligencia artificial industrial</h2>
+          <span class="text-sm font-semibold text-azul opacity-70 group-hover:opacity-100">Más información ↗</span>
+        </div>
+      </a>
+    
+      <a href="https://etsi.us.es/empresas-practicas/catedras/catedra-ghenova-de-proyectos-integrados-de-la-universidad-de-sevilla" target="_blank" rel="noopener noreferrer"
+         class="card group overflow-hidden flex flex-col hover:border-azul hover:shadow-md transition">
+        <div class="logo-tile h-32 sm:h-36 p-4 border-b border-gray-200 bg-white">
+          
+            <img src="../static/img/catedras/ghenova.png" alt="Logotipo de la Cátedra GHENOVA de proyectos integrados de la Universidad de Sevilla" loading="lazy" class="transition-transform group-hover:scale-105">
+          
+        </div>
+        <div class="p-4 flex-1 flex flex-col justify-between gap-2">
+          <h2 class="text-base sm:text-lg leading-snug group-hover:text-azul">Cátedra GHENOVA de proyectos integrados de la Universidad de Sevilla</h2>
+          <span class="text-sm font-semibold text-azul opacity-70 group-hover:opacity-100">Más información ↗</span>
+        </div>
+      </a>
+    
+      <a href="https://etsi.us.es/empresas-practicas/catedras/catedra-Wingenia-Energia" target="_blank" rel="noopener noreferrer"
+         class="card group overflow-hidden flex flex-col hover:border-azul hover:shadow-md transition">
+        <div class="logo-tile h-32 sm:h-36 p-4 border-b border-gray-200 bg-white">
+          
+            <img src="../static/img/catedras/wingenia.png" alt="Logotipo de la Cátedra Wingenia-Energía" loading="lazy" class="transition-transform group-hover:scale-105">
+          
+        </div>
+        <div class="p-4 flex-1 flex flex-col justify-between gap-2">
+          <h2 class="text-base sm:text-lg leading-snug group-hover:text-azul">Cátedra Wingenia-Energía</h2>
+          <span class="text-sm font-semibold text-azul opacity-70 group-hover:opacity-100">Más información ↗</span>
+        </div>
+      </a>
+    
+      <a href="https://etsi.us.es/empresas-practicas/catedras/catedra-Azvi" target="_blank" rel="noopener noreferrer"
+         class="card group overflow-hidden flex flex-col hover:border-azul hover:shadow-md transition">
+        <div class="logo-tile h-32 sm:h-36 p-4 border-b border-gray-200 bg-white">
+          
+            <img src="../static/img/catedras/azvi.png" alt="Logotipo de la Cátedra Azvi" loading="lazy" class="transition-transform group-hover:scale-105">
+          
+        </div>
+        <div class="p-4 flex-1 flex flex-col justify-between gap-2">
+          <h2 class="text-base sm:text-lg leading-snug group-hover:text-azul">Cátedra Azvi</h2>
+          <span class="text-sm font-semibold text-azul opacity-70 group-hover:opacity-100">Más información ↗</span>
+        </div>
+      </a>
+    
+      <a href="https://etsi.us.es/empresas-practicas/catedras/catedra-lantania" target="_blank" rel="noopener noreferrer"
+         class="card group overflow-hidden flex flex-col hover:border-azul hover:shadow-md transition">
+        <div class="logo-tile h-32 sm:h-36 p-4 border-b border-gray-200 bg-white">
+          
+            <img src="../static/img/catedras/lantania.jpg" alt="Logotipo de la Cátedra Lantania: Ingeniería y Tecnología del Agua" loading="lazy" class="transition-transform group-hover:scale-105">
+          
+        </div>
+        <div class="p-4 flex-1 flex flex-col justify-between gap-2">
+          <h2 class="text-base sm:text-lg leading-snug group-hover:text-azul">Cátedra Lantania: Ingeniería y Tecnología del Agua</h2>
+          <span class="text-sm font-semibold text-azul opacity-70 group-hover:opacity-100">Más información ↗</span>
+        </div>
+      </a>
+    
+  </div>
+
+  <a href="https://etsi.us.es/empresas-practicas/catedras-de-empresas" target="_blank" rel="noopener noreferrer" class="btn btn-primary mt-8">Ver las cátedras en la web de la ETSi</a>
+</section>
+</main>
+
+  
+  <footer class="bg-[#0f1b33] text-gray-300 mt-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-10 grid gap-8 md:grid-cols-4">
+      <div>
+        <p class="font-display text-2xl text-white">ESIEM</p>
+        <p class="text-sm mt-1">Encuentro Sobre Ingeniería y Empleo</p>
+        <p class="text-sm mt-3">ETSi, Universidad de Sevilla</p>
+        <p class="text-sm mt-4">
+          <span class="font-semibold text-white">Contacto:</span> D. Sergio Esteban Roncero<br>
+          <span class="text-gray-400">Subdirector de Innovación Docente</span><br>
+          <a class="inline-block mt-1 font-semibold text-oro hover:text-white" href="tel:+34608745894">Tel. 608 745 894</a>
+          <br><a class="inline-block mt-1 font-semibold text-oro hover:text-white break-all" href="mailto:contacto@esiem.es">contacto@esiem.es</a>
+        </p>
+      </div>
+      <div class="text-sm space-y-2">
+        <p class="font-semibold text-white">El encuentro</p>
+        <a class="block hover:text-white" href="../esiem/">ESIEM 2027</a>
+        <a class="block hover:text-white" href="../empresas/">Empresas participantes</a>
+        
+      </div>
+      <div class="text-sm space-y-2">
+        <p class="font-semibold text-white">Síguenos</p>
+        
+          <a class="block hover:text-white" href="https://www.instagram.com/esiem_etsi/" target="_blank" rel="noopener noreferrer">Instagram</a>
+        
+          <a class="block hover:text-white" href="https://www.linkedin.com/company/esiem/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        
+          <a class="block hover:text-white" href="https://x.com/esiem_etsi" target="_blank" rel="noopener noreferrer">X (Twitter)</a>
+        
+      </div>
+      <div class="text-sm space-y-2">
+        <p class="font-semibold text-white">Legal</p>
+        <a class="block hover:text-white" href="../legal/aviso-legal/">Aviso legal</a>
+        <a class="block hover:text-white" href="../legal/privacidad/">Privacidad</a>
+        <a class="block hover:text-white" href="../legal/cookies/">Cookies</a>
+      </div>
+    </div>
+    <div class="brand-stripe"></div>
+  </footer>
+  
+
+  <div id="cookie-banner" class="fixed bottom-0 inset-x-0 z-50 bg-white border-t border-gray-200 shadow-lg" hidden>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-col sm:flex-row gap-3 sm:items-center justify-between text-sm">
+      <p>Usamos únicamente cookies técnicas necesarias para el funcionamiento de la web (sesión y seguridad). <a class="text-azul underline" href="../legal/cookies/">Más información</a>.</p>
+      <button type="button" class="btn btn-primary btn-sm" id="cookie-accept">Entendido</button>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var toggle = document.getElementById('nav-toggle');
+      var menu = document.getElementById('nav-menu');
+      toggle.addEventListener('click', function () {
+        var open = menu.classList.toggle('hidden') === false;
+        menu.classList.toggle('flex', open);
+        toggle.setAttribute('aria-expanded', String(open));
+      });
+      var banner = document.getElementById('cookie-banner');
+      var seen = false;
+      try { seen = localStorage.getItem('esiem-cookies') === '1'; } catch (e) {}
+      if (!seen) banner.hidden = false;
+      document.getElementById('cookie-accept').addEventListener('click', function () {
+        try { localStorage.setItem('esiem-cookies', '1'); } catch (e) {}
+        banner.hidden = true;
+      });
+    })();
+  </script>
+  
+</body>
+</html>

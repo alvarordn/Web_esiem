@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ETSi · Encuentro Sobre Ingeniería y Empleo</title>
+  <meta name="description" content="ESIEM, el Encuentro Sobre Ingeniería y Empleo de la ETSi de la Universidad de Sevilla.">
+  <link rel="icon" type="image/svg+xml" href="../static/img/esiem-isotipo.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:ital,wght@1,600;1,700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.1.11"></script>
+  <style type="text/tailwindcss">
+    @theme {
+      --color-oro: #D99309;
+      --color-rojo: #921D1A;
+      --color-azul: #002F7D;
+      --color-azul-oscuro: #00225c;
+      --font-display: 'Myriad Pro', 'Barlow Semi Condensed', 'Arial Narrow', sans-serif;
+    }
+  </style>
+  <link rel="stylesheet" href="../static/css/esiem.css?v=1794560191">
+  
+</head>
+<body class="min-h-screen flex flex-col">
+  <div class="brand-stripe"></div>
+  <header class="bg-white border-b border-gray-200 sticky top-0 z-40">
+    <nav class="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
+      <a href="../" class="flex items-center gap-3 shrink-0" aria-label="Inicio ESIEM">
+        <img src="../static/img/esiem-isotipo.svg" alt="" class="h-10 w-auto">
+        <span class="font-display text-2xl text-[#1d1d1b]">ESIEM</span>
+      </a>
+      <button type="button" class="xl:hidden btn btn-ghost btn-sm" id="nav-toggle" aria-expanded="false" aria-controls="nav-menu">Menú</button>
+      <div id="nav-menu" class="hidden xl:flex absolute xl:static top-16 left-0 right-0 bg-white xl:bg-transparent border-b xl:border-0 border-gray-200 flex-col xl:flex-row xl:items-center gap-1 xl:gap-4 p-4 xl:p-0 font-semibold text-[14px]">
+        
+          <a class="py-2 whitespace-nowrap hover:text-azul " href="../">Inicio</a>
+        
+          <a class="py-2 whitespace-nowrap hover:text-azul " href="../carta/">Carta del director</a>
+        
+          <a class="py-2 whitespace-nowrap hover:text-azul text-azul" href="../etsi/" aria-current="page">ETSi</a>
+        
+          <a class="py-2 whitespace-nowrap hover:text-azul " href="../esiem/">ESIEM 2027</a>
+        
+          <a class="py-2 whitespace-nowrap hover:text-azul " href="../expositores/">Expositores</a>
+        
+          <a class="py-2 whitespace-nowrap hover:text-azul " href="../empresas/">Empresas</a>
+        
+          <a class="py-2 whitespace-nowrap hover:text-azul " href="../catedras/">Cátedras</a>
+        
+          <a class="py-2 whitespace-nowrap hover:text-azul " href="../organizadores/">Organizadores</a>
+        
+          <a class="py-2 whitespace-nowrap hover:text-azul " href="../siguenos/">Síguenos</a>
+        
+        
+        
+      </div>
+    </nav>
+  </header>
+
+  
+
+  <main class="flex-1">
+<section class="max-w-5xl mx-auto px-4 sm:px-6 py-12">
+  
+
+<figure class="relative mb-10">
+  <img src="../static/img/fig_etsi.jpg" width="1920" height="1080" alt="Estudiantes de la ETSi en los stands de las empresas durante ESIEM"
+       class="w-full aspect-[2/1] object-cover object-[center_45%] rounded-2xl shadow-lg ring-1 ring-black/5">
+  <figcaption class="absolute inset-0 rounded-2xl bg-gradient-to-tr from-azul/90 via-azul/45 to-transparent flex items-end p-5 sm:p-8 md:p-10">
+    <p class="max-w-md text-white drop-shadow-md">
+      <span aria-hidden="true" class="block w-12 h-1 bg-oro rounded-full mb-3 sm:mb-4"></span>
+      <span class="font-display block text-2xl sm:text-4xl md:text-[2.75rem] leading-[1.05]">El marco ideal para el inicio de la relación entre el <span class="text-oro">mundo laboral</span> y el estudiante</span>
+    </p>
+  </figcaption>
+  <span aria-hidden="true" class="absolute -bottom-2 left-6 right-6 h-2 rounded-b-xl bg-gradient-to-r from-azul via-rojo to-oro"></span>
+</figure>
+
+  <p class="text-sm font-bold text-azul uppercase tracking-wider">La Escuela</p>
+  <h1 class="text-4xl md:text-5xl mt-2">Escuela Técnica Superior de Ingeniería de Sevilla</h1>
+  <div class="mt-8 grid gap-8 md:grid-cols-[1.5fr_1fr] items-start">
+    <div class="prose-esiem text-lg">
+      <p>La ETSi, de la Universidad de Sevilla, forma desde hace más de seis décadas a ingenieros que hoy trabajan en la industria, la energía, la tecnología, la construcción y el sector aeroespacial.</p>
+      <p>Su oferta abarca grados, másteres y programas de doctorado, con programas de intercambio con universidades de todo el mundo. ESIEM nace en la Escuela para acercar ese talento a las empresas.</p>
+    </div>
+    <div class="card p-6 logo-tile h-auto">
+      <img src="../static/img/etsi.jpg" alt="Logotipo de la ETSi, Universidad de Sevilla">
+    </div>
+  </div>
+
+  <div class="card mt-10 grid grid-cols-2 md:grid-cols-4 divide-x divide-y md:divide-y-0 divide-gray-200 overflow-hidden">
+    
+      <div class="p-5 text-center">
+        <p class="font-display text-3xl text-azul">+60</p>
+        <p class="text-sm text-gray-600 mt-1">años de historia</p>
+      </div>
+    
+      <div class="p-5 text-center">
+        <p class="font-display text-3xl text-rojo">+5.500</p>
+        <p class="text-sm text-gray-600 mt-1">estudiantes</p>
+      </div>
+    
+      <div class="p-5 text-center">
+        <p class="font-display text-3xl text-oro">+500</p>
+        <p class="text-sm text-gray-600 mt-1">profesores</p>
+      </div>
+    
+      <div class="p-5 text-center">
+        <p class="font-display text-3xl text-azul">761</p>
+        <p class="text-sm text-gray-600 mt-1">titulados en el curso 2023-24</p>
+      </div>
+    
+  </div>
+
+  <div class="mt-14 flex flex-wrap items-end justify-between gap-3">
+    <div>
+      <p class="text-sm font-bold text-oro uppercase tracking-wider">Estudios y titulaciones</p>
+      <h2 class="text-3xl md:text-4xl mt-1">Oferta académica</h2>
+    </div>
+    <a href="https://etsi.us.es/estudios-y-titulaciones" target="_blank" rel="noopener noreferrer" class="text-azul font-semibold hover:underline">Ver en etsi.us.es ↗</a>
+  </div>
+  <p class="mt-3 text-gray-600">Pulsa en cada titulación para ver su plan de estudios en la web de la Escuela.</p>
+
+  
+  <article class="card p-6 md:p-8 mt-6 border-t-4 border-t-azul">
+    <div class="flex flex-wrap items-baseline justify-between gap-2">
+      <h3 class="text-2xl">Grado + Máster (PARS)</h3>
+      <a href="https://etsi.us.es/estudios-y-titulaciones/programas-academicos-con-recorrido-sucesivo-pars" target="_blank" rel="noopener noreferrer" class="text-sm text-azul font-semibold hover:underline">¿Qué es un PARS? ↗</a>
+    </div>
+    <p class="mt-2 text-gray-600">Programas Académicos con Recorrido Sucesivo: un grado seguido de su máster habilitante para la profesión regulada.</p>
+    <ul class="mt-5 divide-y divide-gray-200">
+      
+        <li class="py-4 grid gap-2 md:grid-cols-[13rem_1fr_auto_1fr] md:items-center md:gap-4">
+          <p class="font-display text-xl text-azul">Ingeniería Industrial</p>
+          <a href="https://etsi.us.es/estudios-y-titulaciones/grados/grado-en-ingenieria-de-tecnologias-industriales-plan-2024" target="_blank" rel="noopener noreferrer" class="group flex items-start gap-2 hover:text-azul">
+            <span class="shrink-0 text-xs font-bold uppercase tracking-wider bg-azul/10 text-azul rounded px-1.5 py-0.5 mt-0.5">Grado</span>
+            <span class="group-hover:underline">Grado en Ingeniería de Tecnologías Industriales</span>
+          </a>
+          <span aria-hidden="true" class="hidden md:block text-oro text-xl">→</span>
+          <a href="https://etsi.us.es/estudios-y-titulaciones/masteres/master-universitario-en-ingenieria-industrial-plan-2024" target="_blank" rel="noopener noreferrer" class="group flex items-start gap-2 hover:text-azul">
+            <span class="shrink-0 text-xs font-bold uppercase tracking-wider bg-oro/15 text-[#8a5d05] rounded px-1.5 py-0.5 mt-0.5">Máster</span>
+            <span class="group-hover:underline">Máster Universitario en Ingeniería Industrial</span>
+          </a>
+        </li>
+      
+        <li class="py-4 grid gap-2 md:grid-cols-[13rem_1fr_auto_1fr] md:items-center md:gap-4">
+          <p class="font-display text-xl text-azul">Ingeniería de Telecomunicación</p>
+          <a href="https://etsi.us.es/estudios-y-titulaciones/grados/grado-en-ingenieria-de-las-tecnologias-de-telecomunicacion" target="_blank" rel="noopener noreferrer" class="group flex items-start gap-2 hover:text-azul">
+            <span class="shrink-0 text-xs font-bold uppercase tracking-wider bg-azul/10 text-azul rounded px-1.5 py-0.5 mt-0.5">Grado</span>
+            <span class="group-hover:underline">Grado en Ingeniería de las Tecnologías de Telecomunicación</span>
+          </a>
+          <span aria-hidden="true" class="hidden md:block text-oro text-xl">→</span>
+          <a href="https://etsi.us.es/estudios-y-titulaciones/masteres/master-universitario-en-ingenieria-de-telecomunicacion" target="_blank" rel="noopener noreferrer" class="group flex items-start gap-2 hover:text-azul">
+            <span class="shrink-0 text-xs font-bold uppercase tracking-wider bg-oro/15 text-[#8a5d05] rounded px-1.5 py-0.5 mt-0.5">Máster</span>
+            <span class="group-hover:underline">Máster Universitario en Ingeniería de Telecomunicación</span>
+          </a>
+        </li>
+      
+        <li class="py-4 grid gap-2 md:grid-cols-[13rem_1fr_auto_1fr] md:items-center md:gap-4">
+          <p class="font-display text-xl text-azul">Ingeniería Aeronáutica</p>
+          <a href="https://etsi.us.es/estudios-y-titulaciones/grados/grado-en-ingenieria-aeroespacial" target="_blank" rel="noopener noreferrer" class="group flex items-start gap-2 hover:text-azul">
+            <span class="shrink-0 text-xs font-bold uppercase tracking-wider bg-azul/10 text-azul rounded px-1.5 py-0.5 mt-0.5">Grado</span>
+            <span class="group-hover:underline">Grado en Ingeniería Aeroespacial</span>
+          </a>
+          <span aria-hidden="true" class="hidden md:block text-oro text-xl">→</span>
+          <a href="https://etsi.us.es/estudios-y-titulaciones/masteres/master-universitario-en-ingenieria-aeronautica" target="_blank" rel="noopener noreferrer" class="group flex items-start gap-2 hover:text-azul">
+            <span class="shrink-0 text-xs font-bold uppercase tracking-wider bg-oro/15 text-[#8a5d05] rounded px-1.5 py-0.5 mt-0.5">Máster</span>
+            <span class="group-hover:underline">Máster Universitario en Ingeniería Aeronáutica</span>
+          </a>
+        </li>
+      
+        <li class="py-4 grid gap-2 md:grid-cols-[13rem_1fr_auto_1fr] md:items-center md:gap-4">
+          <p class="font-display text-xl text-azul">Ingeniería de Caminos, Canales y Puertos</p>
+          <a href="https://etsi.us.es/estudios-y-titulaciones/grados/grado-en-ingenieria-civil" target="_blank" rel="noopener noreferrer" class="group flex items-start gap-2 hover:text-azul">
+            <span class="shrink-0 text-xs font-bold uppercase tracking-wider bg-azul/10 text-azul rounded px-1.5 py-0.5 mt-0.5">Grado</span>
+            <span class="group-hover:underline">Grado en Ingeniería Civil</span>
+          </a>
+          <span aria-hidden="true" class="hidden md:block text-oro text-xl">→</span>
+          <a href="https://etsi.us.es/estudios-y-titulaciones/masteres/master-universitario-en-ingenieria-de-caminos-canales-y-puertos" target="_blank" rel="noopener noreferrer" class="group flex items-start gap-2 hover:text-azul">
+            <span class="shrink-0 text-xs font-bold uppercase tracking-wider bg-oro/15 text-[#8a5d05] rounded px-1.5 py-0.5 mt-0.5">Máster</span>
+            <span class="group-hover:underline">Máster Universitario en Ingeniería de Caminos, Canales y Puertos</span>
+          </a>
+        </li>
+      
+        <li class="py-4 grid gap-2 md:grid-cols-[13rem_1fr_auto_1fr] md:items-center md:gap-4">
+          <p class="font-display text-xl text-azul">Ingeniería Química</p>
+          <a href="https://etsi.us.es/estudios-y-titulaciones/grados/grado-en-ingenieria-quimica" target="_blank" rel="noopener noreferrer" class="group flex items-start gap-2 hover:text-azul">
+            <span class="shrink-0 text-xs font-bold uppercase tracking-wider bg-azul/10 text-azul rounded px-1.5 py-0.5 mt-0.5">Grado</span>
+            <span class="group-hover:underline">Grado en Ingeniería Química</span>
+          </a>
+          <span aria-hidden="true" class="hidden md:block text-oro text-xl">→</span>
+          <a href="https://etsi.us.es/estudios-y-titulaciones/masteres/master-universitario-en-ingenieria-quimica" target="_blank" rel="noopener noreferrer" class="group flex items-start gap-2 hover:text-azul">
+            <span class="shrink-0 text-xs font-bold uppercase tracking-wider bg-oro/15 text-[#8a5d05] rounded px-1.5 py-0.5 mt-0.5">Máster</span>
+            <span class="group-hover:underline">Máster Universitario en Ingeniería Química</span>
+          </a>
+        </li>
+      
+    </ul>
+  </article>
+
+  <div class="mt-6 grid gap-6 md:grid-cols-2">
+    <article class="card p-6 md:p-8 border-t-4 border-t-rojo">
+      <h3 class="text-2xl">Grados</h3>
+      <p class="mt-2 text-gray-600">Campus de Excelencia Internacional Andalucía Tech.</p>
+      <ul class="mt-4 space-y-3">
+        
+          <li class="flex gap-2"><span class="text-oro">●</span><a href="https://etsi.us.es/estudios-y-titulaciones/grados/grado-en-ingenieria-de-organizacion-industrial" target="_blank" rel="noopener noreferrer" class="hover:text-azul hover:underline">Grado en Ingeniería de Organización Industrial</a></li>
+        
+          <li class="flex gap-2"><span class="text-oro">●</span><a href="https://etsi.us.es/estudios-y-titulaciones/grados/grado-en-ingenieria-de-la-energia" target="_blank" rel="noopener noreferrer" class="hover:text-azul hover:underline">Grado en Ingeniería de la Energía</a></li>
+        
+          <li class="flex gap-2"><span class="text-oro">●</span><a href="https://etsi.us.es/estudios-y-titulaciones/grados/grado-en-ingenieria-electronica-robotica-y-mecatronica" target="_blank" rel="noopener noreferrer" class="hover:text-azul hover:underline">Grado en Ingeniería Electrónica, Robótica y Mecatrónica</a></li>
+        
+      </ul>
+    </article>
+    <article class="card p-6 md:p-8 border-t-4 border-t-rojo">
+      <h3 class="text-2xl">Programas de doctorado</h3>
+      <p class="mt-2 text-gray-600">Formación investigadora en los grupos de la Escuela.</p>
+      <ul class="mt-4 space-y-3">
+        
+          <li class="flex gap-2"><span class="text-oro">●</span><a href="https://etsi.us.es/estudios-y-titulaciones/doctorados/doctorado-en-ingenieria-automatica-electronica-y-telecomunicacion" target="_blank" rel="noopener noreferrer" class="hover:text-azul hover:underline">Doctorado en Ingeniería Automática, Electrónica y Telecomunicación</a></li>
+        
+          <li class="flex gap-2"><span class="text-oro">●</span><a href="https://etsi.us.es/estudios-y-titulaciones/doctorados/doctorado-en-ingenieria-mecanica-y-de-organizacion-industrial" target="_blank" rel="noopener noreferrer" class="hover:text-azul hover:underline">Doctorado en Ingeniería Mecánica y de Organización Industrial</a></li>
+        
+          <li class="flex gap-2"><span class="text-oro">●</span><a href="https://etsi.us.es/estudios-y-titulaciones/doctorados/doctorado-en-ingenieria-energetica-quimica-y-ambiental" target="_blank" rel="noopener noreferrer" class="hover:text-azul hover:underline">Doctorado en Ingeniería Energética, Química y Ambiental</a></li>
+        
+          <li class="flex gap-2"><span class="text-oro">●</span><a href="https://etsi.us.es/estudios-y-titulaciones/doctorados/doctorado-en-sistemas-de-energia-electrica" target="_blank" rel="noopener noreferrer" class="hover:text-azul hover:underline">Doctorado en Sistemas de Energía Eléctrica</a></li>
+        
+      </ul>
+    </article>
+  </div>
+
+  <article class="card p-6 md:p-8 mt-6 border-t-4 border-t-oro">
+    <h3 class="text-2xl">Másteres universitarios</h3>
+    <ul class="mt-4 grid gap-x-8 gap-y-3 md:grid-cols-2">
+      
+        <li class="flex gap-2"><span class="text-oro">●</span><a href="https://etsi.us.es/estudios-y-titulaciones/masteres/master-universitario-en-ingenieria-industrial-plan-2024" target="_blank" rel="noopener noreferrer" class="hover:text-azul hover:underline">Máster Universitario en Ingeniería Industrial</a></li>
+      
+        <li class="flex gap-2"><span class="text-oro">●</span><a href="https://etsi.us.es/estudios-y-titulaciones/masteres/master-universitario-en-ingenieria-de-telecomunicacion" target="_blank" rel="noopener noreferrer" class="hover:text-azul hover:underline">Máster Universitario en Ingeniería de Telecomunicación</a></li>
+      
+        <li class="flex gap-2"><span class="text-oro">●</span><a href="https://etsi.us.es/estudios-y-titulaciones/masteres/master-universitario-en-ingenieria-aeronautica" target="_blank" rel="noopener noreferrer" class="hover:text-azul hover:underline">Máster Universitario en Ingeniería Aeronáutica</a></li>
+      
+        <li class="flex gap-2"><span class="text-oro">●</span><a href="https://etsi.us.es/estudios-y-titulaciones/masteres/master-universitario-en-ingenieria-de-caminos-canales-y-puertos" target="_blank" rel="noopener noreferrer" class="hover:text-azul hover:underline">Máster Universitario en Ingeniería de Caminos, Canales y Puertos</a></li>
+      
+        <li class="flex gap-2"><span class="text-oro">●</span><a href="https://etsi.us.es/estudios-y-titulaciones/masteres/master-universitario-en-ingenieria-quimica" target="_blank" rel="noopener noreferrer" class="hover:text-azul hover:underline">Máster Universitario en Ingeniería Química</a></li>
+      
+        <li class="flex gap-2"><span class="text-oro">●</span><a href="https://etsi.us.es/estudios-y-titulaciones/masteres/master-universitario-en-diseno-avanzado-en-ingenieria-mecanica" target="_blank" rel="noopener noreferrer" class="hover:text-azul hover:underline">Máster Universitario en Diseño Avanzado en Ingeniería Mecánica</a></li>
+      
+        <li class="flex gap-2"><span class="text-oro">●</span><a href="https://etsi.us.es/estudios-y-titulaciones/masteres/master-universitario-en-ingenieria-en-electronica-robotica-y-automatica" target="_blank" rel="noopener noreferrer" class="hover:text-azul hover:underline">Máster Universitario en Ingeniería en Electrónica, Robótica y Automática</a></li>
+      
+        <li class="flex gap-2"><span class="text-oro">●</span><a href="https://etsi.us.es/estudios-y-titulaciones/masteres/master-universitario-en-organizacion-industrial-y-gestion-de-empresas" target="_blank" rel="noopener noreferrer" class="hover:text-azul hover:underline">Máster Universitario en Organización Industrial y Gestión de Empresas</a></li>
+      
+        <li class="flex gap-2"><span class="text-oro">●</span><a href="https://etsi.us.es/estudios-y-titulaciones/masteres/master-universitario-en-sistemas-de-energia-electrica" target="_blank" rel="noopener noreferrer" class="hover:text-azul hover:underline">Máster Universitario en Sistemas de Energía Eléctrica</a></li>
+      
+        <li class="flex gap-2"><span class="text-oro">●</span><a href="https://etsi.us.es/estudios-y-titulaciones/masteres/master-universitario-en-sistemas-de-energia-termica" target="_blank" rel="noopener noreferrer" class="hover:text-azul hover:underline">Máster Universitario en Sistemas de Energía Térmica</a></li>
+      
+        <li class="flex gap-2"><span class="text-oro">●</span><a href="https://etsi.us.es/estudios-y-titulaciones/masteres/master-universitario-en-ingenieria-ambiental" target="_blank" rel="noopener noreferrer" class="hover:text-azul hover:underline">Máster Universitario en Ingeniería Ambiental</a></li>
+      
+        <li class="flex gap-2"><span class="text-oro">●</span><a href="https://etsi.us.es/estudios-y-titulaciones/masteres/masters-degree-operation-space-systems" target="_blank" rel="noopener noreferrer" class="hover:text-azul hover:underline">Master&#x27;s Degree in Operation of Space Systems</a></li>
+      
+    </ul>
+    <h4 class="font-display text-xl text-azul mt-8">Dobles másteres</h4>
+    <ul class="mt-3 grid gap-x-8 gap-y-3 md:grid-cols-2">
+      
+        <li class="flex gap-2"><span class="text-oro">●</span><a href="https://etsi.us.es/estudios-y-titulaciones/masteres/doble-master-universitario-en-ingenieria-quimica-e-ingenieria-ambiental" target="_blank" rel="noopener noreferrer" class="hover:text-azul hover:underline">Doble Máster Universitario en Ingeniería Química e Ingeniería Ambiental</a></li>
+      
+        <li class="flex gap-2"><span class="text-oro">●</span><a href="https://etsi.us.es/estudios-y-titulaciones/masteres/joint-masters-degree-aeronautic-engineering-and-operation-space-systems" target="_blank" rel="noopener noreferrer" class="hover:text-azul hover:underline">Joint Master&#x27;s Degree in Aeronautic Engineering and Operation of Space Systems</a></li>
+      
+    </ul>
+  </article>
+
+  <a href="https://www.etsi.us.es" target="_blank" rel="noopener noreferrer" class="btn btn-primary mt-8">Visitar la web de la ETSi</a>
+</section>
+</main>
+
+  
+  <footer class="bg-[#0f1b33] text-gray-300 mt-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-10 grid gap-8 md:grid-cols-4">
+      <div>
+        <p class="font-display text-2xl text-white">ESIEM</p>
+        <p class="text-sm mt-1">Encuentro Sobre Ingeniería y Empleo</p>
+        <p class="text-sm mt-3">ETSi, Universidad de Sevilla</p>
+        <p class="text-sm mt-4">
+          <span class="font-semibold text-white">Contacto:</span> D. Sergio Esteban Roncero<br>
+          <span class="text-gray-400">Subdirector de Innovación Docente</span><br>
+          <a class="inline-block mt-1 font-semibold text-oro hover:text-white" href="tel:+34608745894">Tel. 608 745 894</a>
+          <br><a class="inline-block mt-1 font-semibold text-oro hover:text-white break-all" href="mailto:contacto@esiem.es">contacto@esiem.es</a>
+        </p>
+      </div>
+      <div class="text-sm space-y-2">
+        <p class="font-semibold text-white">El encuentro</p>
+        <a class="block hover:text-white" href="../esiem/">ESIEM 2027</a>
+        <a class="block hover:text-white" href="../empresas/">Empresas participantes</a>
+        
+      </div>
+      <div class="text-sm space-y-2">
+        <p class="font-semibold text-white">Síguenos</p>
+        
+          <a class="block hover:text-white" href="https://www.instagram.com/esiem_etsi/" target="_blank" rel="noopener noreferrer">Instagram</a>
+        
+          <a class="block hover:text-white" href="https://www.linkedin.com/company/esiem/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        
+          <a class="block hover:text-white" href="https://x.com/esiem_etsi" target="_blank" rel="noopener noreferrer">X (Twitter)</a>
+        
+      </div>
+      <div class="text-sm space-y-2">
+        <p class="font-semibold text-white">Legal</p>
+        <a class="block hover:text-white" href="../legal/aviso-legal/">Aviso legal</a>
+        <a class="block hover:text-white" href="../legal/privacidad/">Privacidad</a>
+        <a class="block hover:text-white" href="../legal/cookies/">Cookies</a>
+      </div>
+    </div>
+    <div class="brand-stripe"></div>
+  </footer>
+  
+
+  <div id="cookie-banner" class="fixed bottom-0 inset-x-0 z-50 bg-white border-t border-gray-200 shadow-lg" hidden>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-col sm:flex-row gap-3 sm:items-center justify-between text-sm">
+      <p>Usamos únicamente cookies técnicas necesarias para el funcionamiento de la web (sesión y seguridad). <a class="text-azul underline" href="../legal/cookies/">Más información</a>.</p>
+      <button type="button" class="btn btn-primary btn-sm" id="cookie-accept">Entendido</button>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var toggle = document.getElementById('nav-toggle');
+      var menu = document.getElementById('nav-menu');
+      toggle.addEventListener('click', function () {
+        var open = menu.classList.toggle('hidden') === false;
+        menu.classList.toggle('flex', open);
+        toggle.setAttribute('aria-expanded', String(open));
+      });
+      var banner = document.getElementById('cookie-banner');
+      var seen = false;
+      try { seen = localStorage.getItem('esiem-cookies') === '1'; } catch (e) {}
+      if (!seen) banner.hidden = false;
+      document.getElementById('cookie-accept').addEventListener('click', function () {
+        try { localStorage.setItem('esiem-cookies', '1'); } catch (e) {}
+        banner.hidden = true;
+      });
+    })();
+  </script>
+  
+</body>
+</html>
