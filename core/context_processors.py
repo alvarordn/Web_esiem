@@ -1,5 +1,6 @@
 import os
 
+from django.conf import settings as django_settings
 from django.contrib.staticfiles import finders
 from django.urls import reverse
 
@@ -21,11 +22,14 @@ def event(request):
         ('core:organizers', 'Organizadores'),
         ('core:follow', 'Síguenos'),
     ]
+    static_export = getattr(django_settings, 'STATIC_EXPORT', False)  # set by manage.py export_static
+    if static_export:
+        nav = [entry for entry in nav if not entry[0].startswith('accounts:')]
     nav_items = [{'url': reverse(name), 'label': label} for name, label in nav]
     for item in nav_items:
         item['active'] = request.path == item['url']
     return {
-        'event': settings, 'nav_items': nav_items, 'social_links': SOCIAL_LINKS, 'contact': CONTACT,
+        'event': settings, 'static_export': static_export, 'nav_items': nav_items, 'social_links': SOCIAL_LINKS, 'contact': CONTACT,
         # Cache-busting for the stylesheet: browsers would otherwise keep an outdated esiem.css.
         'css_version': _static_version('css/esiem.css'),
     }

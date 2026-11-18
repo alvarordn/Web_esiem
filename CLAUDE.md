@@ -13,7 +13,10 @@ Web platform + CRM for **ESIEM (Encuentro Sobre Ingeniería y Empleo)**, a job f
 .\.venv\Scripts\python manage.py runserver
 .\.venv\Scripts\python manage.py test               # all tests
 .\.venv\Scripts\python manage.py test crm.tests.EmailTests.test_send_invitation_logs_history_and_marks_invited
+.\.venv\Scripts\python manage.py export_static      # public site as static HTML in _site/ (GitHub Pages preview)
 ```
+
+`export_static` sets `settings.STATIC_EXPORT`, exposed to templates as `static_export`: anything that needs the server (private area, participation form) goes inside `{% if not static_export %}`. The directory is exported empty unless `--con-empresas`. The preview lives on the `gh-pages` branch (https://alvarordn.github.io/Web_esiem/); publish by committing `_site/` contents there.
 
 The database is PostgreSQL only (no SQLite fallback): local service `postgresql-x64-18`, database/user/password `esiem`, configured through the `ESIEM_DB_*` variables in `.env`. The `esiem` role has `CREATEDB` so `manage.py test` can create its test database.
 

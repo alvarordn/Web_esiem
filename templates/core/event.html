@@ -37,11 +37,13 @@
         <p class="font-display text-2xl mt-1">Información para expositores →</p>
         <p class="text-sm text-gray-600 mt-1">Stand, presentaciones y catering</p>
       </a>
+      {% if not static_export %}
       <a href="{% url 'accounts:register' %}" class="card p-5 block hover:border-azul transition-colors">
         <p class="text-sm font-bold text-oro uppercase tracking-wider">Participa</p>
         <p class="font-display text-2xl mt-1">Formulario de participación →</p>
         <p class="text-sm text-gray-600 mt-1">Participación: {{ event.participation_fee }}</p>
       </a>
+      {% endif %}
       <a href="{% url 'core:directory' %}" class="card p-5 block hover:border-azul transition-colors">
         <p class="text-sm font-bold text-rojo uppercase tracking-wider">Directorio</p>
         <p class="font-display text-2xl mt-1">Empresas confirmadas →</p>

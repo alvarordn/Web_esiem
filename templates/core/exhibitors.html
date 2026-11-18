@@ -81,7 +81,7 @@
       <h2 class="text-3xl">Coste de participación</h2>
       <p class="text-gray-700 mt-4">En esta edición, el contrato de participación tiene un coste de:</p>
       <p class="font-display text-4xl text-azul mt-2">{{ event.participation_fee }}</p>
-      <a href="{% url 'accounts:register' %}" class="btn btn-primary mt-6 self-start">Formulario de participación</a>
+      {% if not static_export %}<a href="{% url 'accounts:register' %}" class="btn btn-primary mt-6 self-start">Formulario de participación</a>{% endif %}
     </article>
   </div>
 

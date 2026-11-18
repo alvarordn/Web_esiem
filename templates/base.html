@@ -36,7 +36,8 @@
         {% for item in nav_items %}
           <a class="py-2 whitespace-nowrap hover:text-azul {% if item.active %}text-azul{% endif %}" href="{{ item.url }}"{% if item.active %} aria-current="page"{% endif %}>{{ item.label }}</a>
         {% endfor %}
-        {% if user.is_authenticated %}
+        {% if static_export %}
+        {% elif user.is_authenticated %}
           <a class="btn btn-primary btn-sm" href="{% url 'crm:panel' %}">{% if user.is_organizer %}CRM{% else %}Mi área{% endif %}</a>
           <form method="post" action="{% url 'accounts:logout' %}">{% csrf_token %}<button class="btn btn-ghost btn-sm w-full">Salir</button></form>
         {% else %}
@@ -74,7 +75,7 @@
         <p class="font-semibold text-white">El encuentro</p>
         <a class="block hover:text-white" href="{% url 'core:event' %}">{{ event.edition_name }}</a>
         <a class="block hover:text-white" href="{% url 'core:directory' %}">Empresas participantes</a>
-        <a class="block hover:text-white" href="{% url 'accounts:register' %}">Formulario de participación</a>
+        {% if not static_export %}<a class="block hover:text-white" href="{% url 'accounts:register' %}">Formulario de participación</a>{% endif %}
       </div>
       <div class="text-sm space-y-2">
         <p class="font-semibold text-white">Síguenos</p>

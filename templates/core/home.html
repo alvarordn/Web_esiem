@@ -29,7 +29,7 @@
     <div class="mt-10 flex flex-wrap gap-3">
       <a href="{% url 'core:directory' %}" class="btn btn-accent">Ver empresas participantes</a>
       <a href="{% url 'core:letter' %}" class="btn border-white/40 text-white hover:bg-white/10">Carta del director</a>
-      <a href="{% url 'accounts:register' %}" class="btn border-white/40 text-white hover:bg-white/10">Soy empresa invitada</a>
+      {% if not static_export %}<a href="{% url 'accounts:register' %}" class="btn border-white/40 text-white hover:bg-white/10">Soy empresa invitada</a>{% endif %}
     </div>
   </div>
 </section>
@@ -79,6 +79,7 @@
 </section>
 {% endif %}
 
+{% if not static_export %}
 <section class="max-w-7xl mx-auto px-4 sm:px-6 mt-16">
   <div class="card p-8 md:p-10 flex flex-col md:flex-row gap-6 md:items-center justify-between border-l-8 border-l-oro">
     <div>
@@ -90,6 +91,7 @@
     </div>
   </div>
 </section>
+{% endif %}
 
 <section class="max-w-7xl mx-auto px-4 sm:px-6 mt-16">
   <div class="flex items-end justify-between gap-4">
