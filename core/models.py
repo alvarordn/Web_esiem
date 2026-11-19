@@ -20,6 +20,21 @@ def default_event_date():
     return datetime.datetime(2027, 3, 11, 10, 0, tzinfo=ZoneInfo(settings.TIME_ZONE))
 
 
+def month_before(day):
+    """Same day one month earlier (clamped to the end of the month: 31/03 → 28/02)."""
+    first_of_month = day.replace(day=1)
+    last_of_previous = first_of_month - datetime.timedelta(days=1)
+    return last_of_previous.replace(day=min(day.day, last_of_previous.day))
+
+
+def default_attendees_deadline():
+    return month_before(timezone.localtime(default_event_date()).date())
+
+
+def default_materials_deadline():
+    return timezone.localtime(default_event_date()).date() - datetime.timedelta(days=15)
+
+
 def current_edition():
     """Year of the current ESIEM edition: the year of EventSettings.event_date. Default for the
     `edition` field of every CRM record; changing the event date to another year starts a new
@@ -55,6 +70,17 @@ class EventSettings(models.Model):
         help_text='Una actividad por línea con el formato «HH:MM | Actividad».',
     )
     participation_fee = models.CharField('coste de participación', max_length=120, default='1.500 € + IVA')
+    # Shown to companies and organizers in the private area («Fechas límite», above the tabs).
+    attendees_deadline = models.DateField(
+        'fecha límite de personas asistentes', default=default_attendees_deadline,
+        help_text='Hasta cuándo pueden las empresas registrar las personas que asistirán al evento. '
+                  'Si se cambia la fecha del evento, se mueve con ella (salvo que la cambies a la vez).',
+    )
+    materials_deadline = models.DateField(
+        'fecha límite de dossier y material del stand', default=default_materials_deadline,
+        help_text='Hasta cuándo pueden las empresas subir el dossier, logotipo, anuncio y la platabanda. '
+                  'Si se cambia la fecha del evento, se mueve con ella (salvo que la cambies a la vez).',
+    )
 
     class Meta:
         verbose_name = 'configuración del evento'
@@ -63,8 +89,18 @@ class EventSettings(models.Model):
     def __str__(self):
         return self.edition_name
 
+    DEADLINE_FIELDS = ('attendees_deadline', 'materials_deadline')
+
     def save(self, *args, **kwargs):
         self.pk = 1
+        # Moving the event date moves the deadlines by the same number of days, unless they were
+        # edited in the same save (then the typed dates win).
+        old = EventSettings.objects.filter(pk=1).values('event_date', *self.DEADLINE_FIELDS).first()
+        if old and old['event_date'] != self.event_date:
+            shift = self.event_day - timezone.localtime(old['event_date']).date()
+            for name in self.DEADLINE_FIELDS:
+                if getattr(self, name) == old[name]:
+                    setattr(self, name, old[name] + shift)
         super().save(*args, **kwargs)
 
     @classmethod

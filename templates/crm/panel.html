@@ -24,17 +24,43 @@
     <nav id="main-tabs" class="tabs mt-6" role="tablist" aria-label="Secciones del panel">
       <button type="button" class="tab" role="tab" data-view="empresas" aria-selected="false">Empresas</button>
       <button type="button" class="tab" role="tab" data-view="registro" aria-selected="false">Registro</button>
+      <button type="button" class="tab" role="tab" data-view="contactos" aria-selected="false">Contactos</button>
     </nav>
   {% else %}
     <p class="text-sm font-bold text-oro uppercase tracking-wider">Portal del expositor</p>
   {% endif %}
 
   <div id="company-header" class="mt-6"></div>
+  {# Deadlines from EventSettings (Django admin); panel.js shows it together with the company tabs. #}
+  <section id="deadlines" class="mt-6 rounded-xl bg-azul text-white p-5" aria-labelledby="deadlines-title" hidden>
+    <h2 id="deadlines-title" class="text-2xl text-white">Fechas límite</h2>
+    <dl class="mt-3 grid gap-3 sm:grid-cols-2">
+      <div class="rounded-lg bg-white/10 p-3">
+        <dt class="text-sm text-white/80">Personas que asistirán al evento</dt>
+        <dd class="font-semibold text-lg">{{ event.attendees_deadline|date:"j \d\e F \d\e Y" }}</dd>
+      </div>
+      <div class="rounded-lg bg-white/10 p-3">
+        <dt class="text-sm text-white/80">Dossier y material del stand</dt>
+        <dd class="font-semibold text-lg">{{ event.materials_deadline|date:"j \d\e F \d\e Y" }}</dd>
+      </div>
+    </dl>
+  </section>
   <nav id="tabs" class="tabs mt-6" role="tablist" hidden></nav>
   <div id="tab-panel" class="mt-6" role="tabpanel"></div>
 </div>
 
 <div id="toast" class="toast" role="status" hidden></div>
+{# Confirmation popup (panel.js: askConfirmation). #}
+<dialog id="confirm-dialog" class="card m-auto w-[min(92vw,520px)] p-0 shadow-xl backdrop:bg-black/50" aria-labelledby="confirm-dialog-title">
+  <form method="dialog" class="p-6 space-y-4">
+    <h2 id="confirm-dialog-title" class="text-2xl" data-title></h2>
+    <div class="text-gray-700 space-y-2" data-message></div>
+    <div class="flex justify-end gap-2 pt-2">
+      <button value="cancel" class="btn btn-ghost">Cancelar</button>
+      <button value="accept" class="btn btn-primary">Aceptar</button>
+    </div>
+  </form>
+</dialog>
 {{ panel_config|json_script:"panel-config" }}
 {% endblock %}
 

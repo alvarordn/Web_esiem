@@ -20,8 +20,12 @@
 
   <div class="mt-8 grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
     {% for chair in chairs %}
+      {% if chair.url %}
       <a href="{{ chair.url }}" target="_blank" rel="noopener noreferrer"
          class="card group overflow-hidden flex flex-col hover:border-azul hover:shadow-md transition">
+      {% else %}
+      <div class="card overflow-hidden flex flex-col">
+      {% endif %}
         <div class="logo-tile h-32 sm:h-36 p-4 border-b border-gray-200 bg-white">
           {% if chair.logo %}
             <img src="{% static chair.logo %}" alt="Logotipo de la {{ chair.name }}" loading="lazy" class="transition-transform group-hover:scale-105">
@@ -31,9 +35,9 @@
         </div>
         <div class="p-4 flex-1 flex flex-col justify-between gap-2">
           <h2 class="text-base sm:text-lg leading-snug group-hover:text-azul">{{ chair.name }}</h2>
-          <span class="text-sm font-semibold text-azul opacity-70 group-hover:opacity-100">Más información ↗</span>
+          {% if chair.url %}<span class="text-sm font-semibold text-azul opacity-70 group-hover:opacity-100">Más información ↗</span>{% endif %}
         </div>
-      </a>
+      {% if chair.url %}</a>{% else %}</div>{% endif %}
     {% endfor %}
   </div>
 

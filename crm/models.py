@@ -50,6 +50,19 @@ class Company(EditionModel):
     summary = models.TextField('resumen público', blank=True)
     status = models.CharField('estado', max_length=10, choices=Status.choices, default=Status.INTERESTED)
     stand_number = models.CharField('stand asignado', max_length=20, blank=True)
+    # Raised per company from the Django admin / the DB when an exception is agreed.
+    max_attendees = models.PositiveSmallIntegerField(
+        'máximo de asistentes', default=5,
+        help_text='Personas que la empresa puede registrar en «Personas que asistirán al evento».',
+    )
+    # Set when the company confirms a section as final: from then on it can't change it (the
+    # organizers still can, and can reopen it by clearing the date).
+    attendees_confirmed_at = models.DateTimeField(
+        'asistentes confirmados el', null=True, blank=True,
+        help_text='Vacío = la empresa aún puede modificar sus personas asistentes.')
+    materials_confirmed_at = models.DateTimeField(
+        'material confirmado el', null=True, blank=True,
+        help_text='Vacío = la empresa aún puede subir o cambiar el dossier y el material del stand.')
 
     # Participation form (contract / billing data), filled in on registration.
     address = models.CharField('domicilio', max_length=255, blank=True)
@@ -168,6 +181,13 @@ class OrganizationLogEntry(EditionModel):
 
 
 class EventAttendee(EditionModel):
+    """A person a company registers for the event, at most `Company.max_attendees` per company."""
+
+    class Role(models.TextChoices):
+        STAND = 'stand', 'Stand'
+        SPEAKER = 'speaker', 'Ponente'
+        BOTH = 'both', 'Stand y ponente'
+
     company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='attendees')
     first_name = models.CharField('nombre', max_length=100)
     last_name = models.CharField('apellidos', max_length=150)
@@ -175,7 +195,11 @@ class EventAttendee(EditionModel):
     position = models.CharField('cargo', max_length=120, blank=True)
     email = models.EmailField(blank=True)
     phone = models.CharField('teléfono', max_length=40, blank=True)
-    dietary_needs = models.CharField('alergias / catering', max_length=255, blank=True)
+    role = models.CharField('participación', max_length=10, choices=Role.choices, default=Role.STAND)
+    # Catering: allergies only apply to people who eat at the event, the text only if they have any.
+    eats_at_event = models.BooleanField('come en el evento', default=False)
+    has_allergies = models.BooleanField('tiene alergias', default=False)
+    allergies = models.CharField('alergias', max_length=255, blank=True)
 
     class Meta:
         verbose_name = 'asistente'

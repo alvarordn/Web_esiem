@@ -54,8 +54,12 @@ class CompanySerializer(serializers.ModelSerializer):
             'id', 'name', 'cif', 'sector', 'sector_display', 'website', 'summary',
             'status', 'status_display', 'stand_number', 'contacts', 'updated_at',
             'address', 'city', 'postal_code', 'phone', 'fax',
-            'signer_name', 'signer_capacity','portal_access',
+            'signer_name', 'signer_capacity', 'max_attendees',
+            'attendees_confirmed_at', 'materials_confirmed_at', 'portal_access',
         ]
+        # The attendee limit is changed in the Django admin / the DB, not through the panel;
+        # the confirmations through the `confirm-section` endpoint.
+        read_only_fields = ['max_attendees', 'attendees_confirmed_at', 'materials_confirmed_at']
 
     def validate_name(self, value):
         # The DB constraint is case-insensitive and per edition; report it as a form error.
@@ -78,13 +82,71 @@ class CompanySerializer(serializers.ModelSerializer):
 
 
 class CompanyPortalSerializer(CompanySerializer):
-    """What a company user may change about its own company: website and the contract/billing
-    data. Identity (name, CIF, sector) and the organizers' fields (status, stand, public summary)
-    stay read-only."""
+    """What a company user may change about its own company: everything it sent in the
+    participation form (company data, contract signer and the designated contact, i.e. the primary
+    contact), to fix mistakes. The organizers' fields (status, stand, public summary) stay read-only."""
+
+    # Designated contact of the participation form = the primary CompanyContact.
+    CONTACT_FIELDS = {'contact_name': 'name', 'contact_email': 'email', 'contact_phone': 'phone'}
+    CONTACT_LABELS = {'contact_name': 'persona de contacto', 'contact_email': 'email de contacto',
+                      'contact_phone': 'teléfono de contacto'}
+    contact_name = serializers.CharField(max_length=200, required=False, write_only=True)
+    contact_email = serializers.EmailField(required=False, write_only=True)
+    contact_phone = serializers.CharField(max_length=40, required=False, allow_blank=True, write_only=True)
 
     class Meta(CompanySerializer.Meta):
-        fields = [name for name in CompanySerializer.Meta.fields if name != 'portal_access']
-        read_only_fields = ['name', 'cif', 'sector', 'status', 'stand_number', 'summary']
+        fields = [name for name in CompanySerializer.Meta.fields if name != 'portal_access'] + [
+            'contact_name', 'contact_email', 'contact_phone']
+        read_only_fields = ['status', 'stand_number', 'summary', 'max_attendees',
+                            'attendees_confirmed_at', 'materials_confirmed_at']
+
+    def to_representation(self, company):
+        data = super().to_representation(company)
+        contact = company.primary_contact
+        for key, attr in self.CONTACT_FIELDS.items():
+            data[key] = getattr(contact, attr) if contact else ''
+        return data
+
+    def validate_cif(self, value):
+        from accounts.forms import normalize_cif
+
+        cif = normalize_cif(value)
+        if not cif:
+            raise serializers.ValidationError('Introduce el CIF de la empresa.')
+        others = Company.objects.filter(edition=self.instance.edition).exclude(pk=self.instance.pk).exclude(cif='')
+        if any(normalize_cif(other) == cif for other in others.values_list('cif', flat=True)):
+            raise serializers.ValidationError('Ya hay otra empresa con ese CIF en esta edición.')
+        return cif
+
+    def validate_contact_email(self, value):
+        value = value.lower()
+        contact = self.instance.primary_contact
+        clash = self.instance.contacts.filter(email__iexact=value)
+        if contact:
+            clash = clash.exclude(pk=contact.pk)
+        if clash.exists():
+            raise serializers.ValidationError('Ya hay otro contacto de la empresa con ese email.')
+        return value
+
+    def update(self, company, validated_data):
+        contact_data = {attr: validated_data.pop(key)
+                        for key, attr in self.CONTACT_FIELDS.items() if key in validated_data}
+        company = super().update(company, validated_data)
+        if contact_data:
+            contact = company.primary_contact
+            if contact:
+                for attr, value in contact_data.items():
+                    setattr(contact, attr, value)
+                contact.is_primary = True
+                contact.save()
+            elif contact_data.get('email'):
+                CompanyContact.objects.create(company=company, is_primary=True, **contact_data)
+        return company
+
+    def field_label(self, key):
+        if key in self.CONTACT_LABELS:
+            return self.CONTACT_LABELS[key]
+        return str(Company._meta.get_field(key).verbose_name)
 
 
 def file_state(company, field_name):
@@ -110,7 +172,7 @@ class CompanyListSerializer(serializers.ModelSerializer):
         model = Company
         fields = [
             'id', 'name', 'sector', 'status', 'status_display',
-            'attendee_count', 'dossier_state', 'logo_state', 'advert_state', 'banner_state',
+            'attendee_count', 'max_attendees', 'dossier_state', 'logo_state', 'advert_state', 'banner_state',
         ]
 
     def get_dossier_state(self, company):
@@ -167,10 +229,25 @@ class AttendeeSerializer(serializers.ModelSerializer):
         model = EventAttendee
         fields = [
             'id', 'company', 'first_name', 'last_name', 'dni', 'position',
-            'email', 'phone', 'dietary_needs',
+            'email', 'phone', 'role', 'eats_at_event', 'has_allergies', 'allergies',
         ]
         # Company users never send it (it's forced server-side); organizers must.
         extra_kwargs = {'company': {'required': False}}
+
+    def validate(self, attrs):
+        # Allergies only make sense for someone who eats at the event, and then must be described.
+        def value(name):
+            if name in attrs:
+                return attrs[name]
+            return getattr(self.instance, name) if self.instance else EventAttendee._meta.get_field(name).default
+
+        if not value('eats_at_event'):
+            attrs['has_allergies'] = False
+        if not value('has_allergies'):
+            attrs['allergies'] = ''
+        elif not value('allergies').strip():
+            raise serializers.ValidationError({'allergies': 'Indica qué alergias tiene.'})
+        return attrs
 
 
 ALLOWED_EXTENSIONS = {
@@ -248,6 +325,39 @@ class EmailHistorySerializer(serializers.ModelSerializer):
 
     def get_sender_name(self, email):
         return str(email.sender) if email.sender else ''
+
+
+class MailingCompanySerializer(CompanyListSerializer):
+    """«Contactos» view: each company with what it has done (to filter by) and its contacts."""
+
+    contacts = ContactSerializer(many=True, read_only=True)
+
+    class Meta(CompanyListSerializer.Meta):
+        fields = CompanyListSerializer.Meta.fields + [
+            'max_attendees', 'attendees_confirmed_at', 'materials_confirmed_at', 'contacts']
+
+
+# Emails the «Contactos» view sends to several companies at once. Acceptance / rejection decide a
+# company's status, so they stay in each company's own composer.
+BULK_EMAIL_KINDS = ['summary', 'attendees', 'dossier']
+
+
+class BulkEmailSerializer(serializers.Serializer):
+    contacts = serializers.ListField(child=serializers.IntegerField(), allow_empty=False)
+    subject = serializers.CharField(max_length=255)
+    body = serializers.CharField()
+    template = serializers.CharField(required=False, allow_blank=True, default='')
+    kind = serializers.ChoiceField(choices=BULK_EMAIL_KINDS, default='summary')
+    # Already sent from the organizer's own mail client: only log it, don't send.
+    manual = serializers.BooleanField(default=False)
+
+    def validate(self, attrs):
+        from .emailing import CREDENTIAL_PLACEHOLDERS
+
+        if any(p in attrs['subject'] + attrs['body'] for p in CREDENTIAL_PLACEHOLDERS):
+            raise serializers.ValidationError(
+                'El usuario y la contraseña del portal solo se envían desde la ficha de cada empresa (correo de aceptación).')
+        return attrs
 
 
 class SendEmailSerializer(serializers.Serializer):

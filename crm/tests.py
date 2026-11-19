@@ -36,6 +36,33 @@ def set_event_date(year, month, day):
     return event
 
 
+class DeadlineTests(TestCase):
+    def test_tentative_deadlines_and_they_move_with_the_event(self):
+        event = EventSettings.load()  # 11/03/2027
+        self.assertEqual((event.attendees_deadline, event.materials_deadline),
+                         (datetime.date(2027, 2, 11), datetime.date(2027, 2, 24)))
+        event = set_event_date(2027, 3, 18)
+        self.assertEqual((event.attendees_deadline, event.materials_deadline),
+                         (datetime.date(2027, 2, 18), datetime.date(2027, 3, 3)))
+
+    def test_deadline_typed_with_the_new_event_date_is_kept(self):
+        event = EventSettings.load()
+        event.event_date = datetime.datetime(2027, 3, 18, 10, 0, tzinfo=ZoneInfo('Europe/Madrid'))
+        event.attendees_deadline = datetime.date(2027, 1, 31)
+        event.save()
+        event.refresh_from_db()
+        self.assertEqual((event.attendees_deadline, event.materials_deadline),
+                         (datetime.date(2027, 1, 31), datetime.date(2027, 3, 3)))
+
+    def test_panel_shows_the_deadlines(self):
+        company = Company.objects.create(name='Acme', status=Company.Status.CONFIRMED)
+        self.client.force_login(User.objects.create_user('acme', password='x', is_company=True, company=company))
+        response = self.client.get(reverse('crm:panel'))
+        self.assertContains(response, 'Fechas límite')
+        self.assertContains(response, '11 de febrero de 2027')
+        self.assertContains(response, '24 de febrero de 2027')
+
+
 class EditionTests(TestCase):
     def test_new_records_take_the_year_of_the_event_date(self):
         company = Company.objects.create(name='Acme')
@@ -133,18 +160,39 @@ class CompanyScopingTests(ApiTestCase):
                          ('done', 'pending', 'done', 'missing'))
         self.assertEqual((beta['attendee_count'], beta['dossier_state']), (0, 'missing'))
 
-    def test_company_user_can_edit_contract_data_and_it_is_logged(self):
+    def test_company_user_can_edit_form_data_and_it_is_logged(self):
         self.client.force_authenticate(self.company_user)
         response = self.client.patch(f'/api/companies/{self.acme.id}/', {
-            'address': 'Calle Nueva 2', 'city': 'Sevilla', 'name': 'Otro nombre', 'cif': 'X1',
+            'address': 'Calle Nueva 2', 'city': 'Sevilla', 'name': 'Otro nombre', 'cif': 'b-123',
         }, format='json')
         self.assertEqual(response.status_code, 200)
         self.acme.refresh_from_db()
         self.assertEqual((self.acme.address, self.acme.city), ('Calle Nueva 2', 'Sevilla'))
-        self.assertEqual((self.acme.name, self.acme.cif), ('Acme', ''))
+        self.assertEqual((self.acme.name, self.acme.cif), ('Otro nombre', 'B123'))
         note = CRMNote.objects.get(company=self.acme)
-        self.assertIn('domicilio', note.text)
-        self.assertIn('población', note.text)
+        for label in ('domicilio', 'población', 'nombre', 'CIF'):
+            self.assertIn(label, note.text)
+
+    def test_company_user_cannot_take_another_companys_cif(self):
+        self.beta.cif = 'B999'
+        self.beta.save()
+        self.client.force_authenticate(self.company_user)
+        response = self.client.patch(f'/api/companies/{self.acme.id}/', {'cif': 'b999'}, format='json')
+        self.assertEqual(response.status_code, 400)
+        self.assertIn('cif', response.json())
+
+    def test_company_user_can_edit_designated_contact(self):
+        contact = self.contact
+        self.client.force_authenticate(self.company_user)
+        response = self.client.patch(f'/api/companies/{self.acme.id}/', {
+            'contact_name': 'Ana López', 'contact_email': 'ANA.LOPEZ@acme.example', 'contact_phone': '600',
+        }, format='json')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual((response.json()['contact_name'], response.json()['contact_email']),
+                         ('Ana López', 'ana.lopez@acme.example'))
+        contact.refresh_from_db()
+        self.assertEqual((contact.name, contact.email, contact.phone), ('Ana López', 'ana.lopez@acme.example', '600'))
+        self.assertIn('email de contacto', CRMNote.objects.get(company=self.acme).text)
 
     def test_company_user_cannot_change_status_stand_or_summary(self):
         self.client.force_authenticate(self.company_user)
@@ -167,10 +215,87 @@ class CompanyScopingTests(ApiTestCase):
 
     def test_attendee_edits_by_company_are_visible_to_organizer(self):
         self.client.force_authenticate(self.company_user)
-        self.client.post('/api/attendees/', {'first_name': 'Eva', 'last_name': 'Ruiz', 'dni': '1X', 'dietary_needs': 'celíaca'}, format='json')
+        self.client.post('/api/attendees/', {
+            'first_name': 'Eva', 'last_name': 'Ruiz', 'dni': '1X', 'role': 'both',
+            'eats_at_event': True, 'has_allergies': True, 'allergies': 'celíaca',
+        }, format='json')
         self.client.force_authenticate(self.organizer)
         rows = self.client.get(f'/api/attendees/?company={self.acme.id}').json()
-        self.assertEqual(rows[0]['dietary_needs'], 'celíaca')
+        self.assertEqual((rows[0]['role'], rows[0]['allergies']), ('both', 'celíaca'))
+
+    def test_attendees_are_limited_per_company(self):
+        self.client.force_authenticate(self.company_user)
+        for dni in range(5):
+            self.assertEqual(self.client.post('/api/attendees/', {
+                'first_name': 'P', 'last_name': str(dni), 'dni': str(dni)}, format='json').status_code, 201)
+        response = self.client.post('/api/attendees/', {'first_name': 'P', 'last_name': '6', 'dni': '6'}, format='json')
+        self.assertEqual(response.status_code, 400)
+        self.assertIn('máximo de 5', str(response.json()))
+        # The limit is raised per company in the DB / Django admin.
+        Company.objects.filter(pk=self.acme.pk).update(max_attendees=6)
+        response = self.client.post('/api/attendees/', {'first_name': 'P', 'last_name': '6', 'dni': '6'}, format='json')
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(self.client.get(f'/api/companies/{self.acme.id}/').json()['max_attendees'], 6)
+
+    def test_confirmed_attendees_are_locked_for_the_company_until_reopened(self):
+        self.client.force_authenticate(self.company_user)
+        url = f'/api/companies/{self.acme.id}/confirm-section/'
+        # Nothing to confirm yet.
+        self.assertEqual(self.client.post(url, {'section': 'attendees'}, format='json').status_code, 400)
+        attendee = EventAttendee.objects.create(company=self.acme, first_name='Ana', last_name='López', dni='1')
+        response = self.client.post(url, {'section': 'attendees'}, format='json')
+        self.assertEqual(response.status_code, 200)
+        self.assertIsNotNone(response.json()['attendees_confirmed_at'])
+        self.assertIn('ha confirmado las personas', CRMNote.objects.get(company=self.acme).text)
+        # Locked for the company: no create, edit or delete.
+        self.assertEqual(self.client.post('/api/attendees/', {'first_name': 'Eva', 'last_name': 'Ruiz', 'dni': '2'},
+                                          format='json').status_code, 403)
+        self.assertEqual(self.client.patch(f'/api/attendees/{attendee.id}/', {'dni': '9'}, format='json').status_code, 403)
+        self.assertEqual(self.client.delete(f'/api/attendees/{attendee.id}/').status_code, 403)
+        # The company can't reopen it; the organizers can still edit and can reopen it.
+        self.assertEqual(self.client.delete(f'{url}?section=attendees').status_code, 403)
+        self.client.force_authenticate(self.organizer)
+        self.assertEqual(self.client.patch(f'/api/attendees/{attendee.id}/', {'dni': '9'}, format='json').status_code, 200)
+        self.assertIsNone(self.client.delete(f'{url}?section=attendees').json()['attendees_confirmed_at'])
+        self.client.force_authenticate(self.company_user)
+        self.assertEqual(self.client.delete(f'/api/attendees/{attendee.id}/').status_code, 204)
+
+    def test_confirmed_materials_are_locked_for_the_company(self):
+        CompanyDocumentation.objects.create(company=self.acme, logo='companies/x/l.png')
+        self.client.force_authenticate(self.company_user)
+        response = self.client.post(f'/api/companies/{self.acme.id}/confirm-section/', {'section': 'materials'}, format='json')
+        self.assertIsNotNone(response.json()['materials_confirmed_at'])
+        upload = SimpleUploadedFile('d.pdf', b'%PDF-1.4', content_type='application/pdf')
+        response = self.client.patch(f'/api/companies/{self.acme.id}/documentation/', {'dossier': upload}, format='multipart')
+        self.assertEqual(response.status_code, 403)
+        # Companies can't set the dates through the normal company PATCH either.
+        self.client.patch(f'/api/companies/{self.acme.id}/', {'materials_confirmed_at': None}, format='json')
+        self.acme.refresh_from_db()
+        self.assertIsNotNone(self.acme.materials_confirmed_at)
+
+    def test_company_user_cannot_change_attendee_limit(self):
+        self.client.force_authenticate(self.company_user)
+        self.client.patch(f'/api/companies/{self.acme.id}/', {'max_attendees': 50}, format='json')
+        self.acme.refresh_from_db()
+        self.assertEqual(self.acme.max_attendees, 5)
+
+    def test_attendee_allergies_depend_on_eating(self):
+        self.client.force_authenticate(self.company_user)
+        base = {'first_name': 'Eva', 'last_name': 'Ruiz', 'dni': '1X'}
+        response = self.client.post('/api/attendees/', {**base, 'eats_at_event': True, 'has_allergies': True,
+                                                        'allergies': ' '}, format='json')
+        self.assertEqual(response.status_code, 400)
+        self.assertIn('allergies', response.json())
+        response = self.client.post('/api/attendees/', {**base, 'eats_at_event': False, 'has_allergies': True,
+                                                        'allergies': 'gluten'}, format='json')
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual((response.json()['has_allergies'], response.json()['allergies']), (False, ''))
+        # Editing to «no come» clears the allergies already registered.
+        attendee = EventAttendee.objects.create(company=self.acme, first_name='Luis', last_name='Gil', dni='2',
+                                                eats_at_event=True, has_allergies=True, allergies='marisco')
+        self.client.patch(f'/api/attendees/{attendee.id}/', {'eats_at_event': False}, format='json')
+        attendee.refresh_from_db()
+        self.assertEqual((attendee.has_allergies, attendee.allergies), (False, ''))
 
     def test_company_user_cannot_use_crm_only_endpoints(self):
         self.client.force_authenticate(self.company_user)
@@ -251,6 +376,94 @@ class OrganizationLogTests(ApiTestCase):
         self.assertEqual(self.client.get('/api/objectives/').status_code, 403)
         self.assertEqual(self.client.get('/api/log-entries/').status_code, 403)
         self.assertEqual(self.client.post('/api/log-entries/', {'text': 'x'}, format='json').status_code, 403)
+
+
+@override_settings(EMAIL_AUTOMATIC_SENDING=True)  # independent of the local .env
+class MailingTests(ApiTestCase):
+    """«Contactos» view: contacts of every company and one email to several companies."""
+
+    def setUp(self):
+        super().setUp()
+        self.beta_contact = CompanyContact.objects.create(company=self.beta, email='info@beta.es', name='Luis', is_primary=True)
+        self.beta_other = CompanyContact.objects.create(company=self.beta, email='rrhh@beta.es', name='Eva')
+        self.client.force_authenticate(self.organizer)
+
+    def payload(self, contacts, **data):
+        return {'contacts': [c.id for c in contacts], 'subject': 'Material de {nombre_evento}',
+                'body': 'Hola: os recordamos el material de {nombre_evento}.', 'kind': 'dossier', **data}
+
+    def test_list_has_progress_and_contacts_and_is_organizer_only(self):
+        EventAttendee.objects.create(company=self.acme, first_name='A', last_name='B', dni='1')
+        rows = {r['name']: r for r in self.client.get('/api/mailing/').json()}
+        self.assertEqual(rows['Acme']['attendee_count'], 1)
+        self.assertEqual(rows['Acme']['logo_state'], 'missing')
+        self.assertEqual({c['email'] for c in rows['Beta']['contacts']}, {'info@beta.es', 'rrhh@beta.es'})
+        self.client.force_authenticate(self.company_user)
+        self.assertEqual(self.client.get('/api/mailing/').status_code, 403)
+
+    def test_preview_is_one_message_for_everyone(self):
+        message = self.client.post('/api/mailing/preview/', self.payload([self.contact, self.beta_contact, self.beta_other]),
+                                   format='json').json()
+        self.assertEqual(message['subject'], 'Material de ESIEM 2027')
+        self.assertEqual(message['recipients'], ['rrhh@acme.es', 'info@beta.es', 'rrhh@beta.es'])
+        self.assertEqual([(c['name'], c['recipients']) for c in message['companies']],
+                         [('Acme', ['rrhh@acme.es']), ('Beta', ['info@beta.es', 'rrhh@beta.es'])])
+        self.assertEqual(len(mail.outbox), 0)
+
+    def test_send_single_bcc_email_logged_in_each_bitacora(self):
+        response = self.client.post('/api/mailing/send/', self.payload([self.contact, self.beta_other]), format='json')
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.json(), {'companies': 2, 'recipients': 2})
+        self.assertEqual(len(mail.outbox), 1)
+        message = mail.outbox[0]
+        self.assertEqual((message.to, message.cc), ([], []))  # nobody sees the other recipients
+        self.assertEqual(message.bcc, ['rrhh@acme.es', 'rrhh@beta.es'])
+        self.assertNotIn('rrhh@', message.message().as_string())  # Bcc never goes in the headers
+        for company, address in ((self.acme, 'rrhh@acme.es'), (self.beta, 'rrhh@beta.es')):
+            note = CRMNote.objects.get(company=company, kind=CRMNote.Kind.EMAIL)
+            self.assertIn(f'Correo de solicitud de materiales enviado a {address} en copia oculta junto con otras 1 empresa(s)', note.text)
+            self.assertEqual(company.emails.get().recipients, [address])
+
+    def test_company_placeholders_are_rejected(self):
+        response = self.client.post('/api/mailing/send/', self.payload([self.contact], body='Hola {nombre_empresa}'), format='json')
+        self.assertEqual(response.status_code, 400)
+        self.assertIn('{nombre_empresa}', str(response.json()))
+        self.assertEqual(len(mail.outbox), 0)
+
+    def test_manual_send_only_logs(self):
+        with self.settings(EMAIL_AUTOMATIC_SENDING=False):
+            self.assertEqual(self.client.post('/api/mailing/send/', self.payload([self.contact]), format='json').status_code, 400)
+            response = self.client.post('/api/mailing/send/', self.payload([self.contact], manual=True), format='json')
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(len(mail.outbox), 0)
+        self.assertTrue(self.acme.emails.get().manual)
+        self.assertIn('desde Outlook', CRMNote.objects.get(company=self.acme).text)
+
+    def test_smtp_failure_logs_nothing(self):
+        with mock.patch('crm.emailing.EmailMessage.send', side_effect=smtplib.SMTPRecipientsRefused({})):
+            response = self.client.post('/api/mailing/send/', self.payload([self.contact]), format='json')
+        self.assertEqual(response.status_code, 502)
+        self.assertFalse(CRMNote.objects.filter(company=self.acme).exists())
+        self.assertFalse(self.acme.emails.exists())
+
+    def test_rejects_credentials_decisions_and_past_editions(self):
+        response = self.client.post('/api/mailing/send/', self.payload([self.contact], body='Usuario: {usuario}'), format='json')
+        self.assertEqual(response.status_code, 400)
+        response = self.client.post('/api/mailing/send/', self.payload([self.contact], kind='acceptance'), format='json')
+        self.assertEqual(response.status_code, 400)
+        set_event_date(2028, 3, 9)
+        response = self.client.post('/api/mailing/send/', self.payload([self.contact]), format='json')
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(len(mail.outbox), 0)
+
+    def test_general_template_has_no_company_placeholders(self):
+        data = self.client.get('/api/email-templates/general/?name=solicitud_asistentes.txt').json()
+        text = data['subject'] + data['body']
+        self.assertNotIn('{', text)
+        self.assertIn('vuestra empresa', text)
+        self.assertIn('ESIEM 2027', text)
+        self.assertFalse(data['credentials'])
+        self.assertTrue(self.client.get('/api/email-templates/general/?name=aceptacion.txt').json()['credentials'])
 
 
 @override_settings(EMAIL_AUTOMATIC_SENDING=True)  # independent of the local .env

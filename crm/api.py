@@ -1,11 +1,15 @@
+import smtplib
+
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.db import transaction
 from django.db.models import Count, Max, Q
+from django.db.models.functions import Lower
 from django.http import FileResponse
 from django.utils import timezone
 from rest_framework import mixins, serializers, status, viewsets
 from rest_framework.decorators import action
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.parsers import FormParser, JSONParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -26,6 +30,7 @@ from .models import (
 from .permissions import IsOrganizer, IsOrganizerOrCompanyUser
 from .serializers import (
     AttendeeSerializer,
+    BulkEmailSerializer,
     CompanyListSerializer,
     CompanyPortalSerializer,
     CompanySerializer,
@@ -33,6 +38,7 @@ from .serializers import (
     DocumentationSerializer,
     EmailHistorySerializer,
     LogEntrySerializer,
+    MailingCompanySerializer,
     NoteSerializer,
     ObjectiveSerializer,
     SendEmailSerializer,
@@ -49,6 +55,22 @@ EMAIL_KIND_LABELS = {
 
 # CompanyDocumentation file fields and how the Bitácora names them.
 FILE_LABELS = {'dossier': 'dossier', 'logo': 'logotipo', 'advert': 'anuncio', 'banner': 'diseño de la platabanda'}
+
+
+# Sections a company confirms as final from its private area: the Company field holding the date,
+# and how the Bitácora names them.
+CONFIRMABLE_SECTIONS = {
+    'attendees': ('attendees_confirmed_at', 'las personas que asistirán al evento'),
+    'materials': ('materials_confirmed_at', 'el dossier y el material del stand'),
+}
+
+
+def ensure_section_open(user, company, section):
+    """Company users can't change a section they already confirmed (organizers always can)."""
+    field, label = CONFIRMABLE_SECTIONS[section]
+    if not user.is_organizer and Company.objects.filter(pk=company.pk, **{f'{field}__isnull': False}).exists():
+        raise PermissionDenied(f'Ya has confirmado {label}: no se pueden modificar. '
+                               'Si necesitas algún cambio, contacta con la organización.')
 
 
 class CompanyViewSet(viewsets.ModelViewSet):
@@ -83,15 +105,16 @@ class CompanyViewSet(viewsets.ModelViewSet):
 
     def perform_update(self, serializer):
         company = serializer.instance
-        before = {name: getattr(company, name) for name in serializer.validated_data}
-        serializer.save()
         if self.request.user.is_organizer:
+            serializer.save()
             return
-        # Let the organizers know in the Bitácora when a company edits its own data.
-        changed = [
-            str(Company._meta.get_field(name).verbose_name)
-            for name, old in before.items() if getattr(company, name) != old
-        ]
+        # Let the organizers know in the Bitácora when a company edits its own data
+        # (CompanyPortalSerializer: company fields plus the designated contact).
+        keys = list(serializer.validated_data)
+        before = serializer.to_representation(company)
+        serializer.save()
+        after = serializer.to_representation(company)
+        changed = [serializer.field_label(key) for key in keys if before.get(key) != after.get(key)]
         if changed:
             CRMNote.objects.create(
                 company=company, author=self.request.user, kind=CRMNote.Kind.SYSTEM,
@@ -115,6 +138,7 @@ class CompanyViewSet(viewsets.ModelViewSet):
         company = self.get_object()
         doc, _ = CompanyDocumentation.objects.get_or_create(company=company)
         if request.method == 'PATCH':
+            ensure_section_open(request.user, company, 'materials')
             serializer = DocumentationSerializer(doc, data=request.data, partial=True, context={'request': request})
             serializer.is_valid(raise_exception=True)
             data = dict(serializer.validated_data)
@@ -131,6 +155,38 @@ class CompanyViewSet(viewsets.ModelViewSet):
                 self._log_company_file_changes(company, request.user, data, previous)
             return Response(serializer.data)
         return Response(DocumentationSerializer(doc, context={'request': request}).data)
+
+    @action(detail=True, methods=['post', 'delete'], url_path='confirm-section')
+    def confirm_section(self, request, pk=None):
+        """{section: attendees|materials}. POST: the company confirms that section as final and can no
+        longer change it. DELETE: organizers reopen it so the company can fix something."""
+        company = self.get_object()
+        section = request.data.get('section') or request.query_params.get('section')
+        if section not in CONFIRMABLE_SECTIONS:
+            return Response({'section': f'Usa uno de: {", ".join(CONFIRMABLE_SECTIONS)}.'}, status=status.HTTP_400_BAD_REQUEST)
+        field, label = CONFIRMABLE_SECTIONS[section]
+        user = request.user
+        if request.method == 'DELETE':
+            if not user.is_organizer:
+                raise PermissionDenied('Solo la organización puede reabrir una sección confirmada.')
+            if getattr(company, field):
+                setattr(company, field, None)
+                company.save(update_fields=[field, 'updated_at'])
+                CRMNote.objects.create(company=company, author=user, kind=CRMNote.Kind.SYSTEM,
+                                       text=f'La organización ha reabierto {label}: la empresa puede volver a modificarlos.')
+        else:
+            if user.is_organizer:
+                raise PermissionDenied('La confirmación la hace la propia empresa desde su área privada.')
+            empty = (not company.attendees.exists() if section == 'attendees'
+                     else not any(getattr(getattr(company, 'documentation', None), name, None) for name in FILE_LABELS))
+            if empty:
+                return Response({'detail': f'No hay nada que confirmar todavía en {label}.'}, status=status.HTTP_400_BAD_REQUEST)
+            if not getattr(company, field):
+                setattr(company, field, timezone.now())
+                company.save(update_fields=[field, 'updated_at'])
+                CRMNote.objects.create(company=company, author=user, kind=CRMNote.Kind.SYSTEM,
+                                       text=f'La empresa ha confirmado {label} como definitivos.')
+        return Response(self.get_serializer(company).data)
 
     @action(detail=True, methods=['get'], url_path='materials-zip')
     def materials_zip(self, request, pk=None):
@@ -313,6 +369,27 @@ class AttendeeViewSet(CompanyScopedViewSet):
     queryset = EventAttendee.objects.all()
     serializer_class = AttendeeSerializer
 
+    def perform_create(self, serializer):
+        # At most Company.max_attendees people per company (raised per company in the Django admin).
+        user = self.request.user
+        company_id = user.company_id if not user.is_organizer else getattr(serializer.validated_data.get('company'), 'pk', None)
+        company = Company.objects.filter(pk=company_id).first()  # fresh: the limit is edited in the DB
+        if company:
+            ensure_section_open(user, company, 'attendees')
+            if company.attendees.count() >= company.max_attendees:
+                raise serializers.ValidationError({'non_field_errors': [
+                    f'Se ha alcanzado el máximo de {company.max_attendees} personas asistentes para esta empresa.']})
+        self._save(serializer)
+
+    # Once the company confirmed its attendees, it can't edit or remove them either.
+    def perform_update(self, serializer):
+        ensure_section_open(self.request.user, serializer.instance.company, 'attendees')
+        self._save(serializer)
+
+    def perform_destroy(self, instance):
+        ensure_section_open(self.request.user, instance.company, 'attendees')
+        instance.delete()
+
 
 class ContactViewSet(CompanyScopedViewSet):
     queryset = CompanyContact.objects.all()
@@ -388,3 +465,91 @@ class EmailTemplateListView(viewsets.ViewSet):
 
     def list(self, request):
         return Response({'templates': emailing.list_templates(), 'defaults': emailing.DEFAULT_TEMPLATES})
+
+    @action(detail=False, methods=['get'])
+    def general(self, request):
+        """?name=: the template for a message to several companies at once (the «Contactos» view):
+        event placeholders filled, company ones replaced by a general wording."""
+        name = request.query_params.get('name', '')
+        try:
+            template = emailing.read_template(name)
+            credentials = emailing.uses_credentials(name)
+        except FileNotFoundError:
+            return Response({'detail': 'Plantilla no encontrada.'}, status=status.HTTP_404_NOT_FOUND)
+        return Response({'name': name, 'credentials': credentials,
+                         'subject': emailing.fill_general_placeholders(template['subject'], request),
+                         'body': emailing.fill_general_placeholders(template['body'], request)})
+
+
+class MailingViewSet(viewsets.ViewSet):
+    """«Contactos» view (organizers): the contacts of every company of the current edition, with what
+    each company has done so the panel can filter them, and one email to the selected contacts.
+
+    It goes out as a single message with every recipient in Bcc, so the text is the same for all
+    (no company placeholders). Each company still gets its own EmailHistory record and Bitácora note
+    with its own recipients, as if it had been sent from its own composer."""
+
+    permission_classes = [IsAuthenticated, IsOrganizer]
+
+    def list(self, request):
+        companies = (Company.objects.current().select_related('documentation').prefetch_related('contacts')
+                     .annotate(attendee_count=Count('attendees', distinct=True)).order_by(Lower('name')))
+        return Response(MailingCompanySerializer(companies, many=True).data)
+
+    def _message(self, request):
+        """(data, {company: [addresses]}, subject, body) for the selected contacts."""
+        serializer = BulkEmailSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
+        leftover = emailing.company_placeholders_in(data['subject'] + data['body'])
+        if leftover:
+            raise serializers.ValidationError({'body': (
+                f'El correo va a todas las empresas a la vez, en copia oculta: quita {", ".join(leftover)} '
+                'o cámbialo por un texto general.')})
+        ids = set(data['contacts'])
+        contacts = list(CompanyContact.objects.filter(pk__in=ids, company__edition=current_edition())
+                        .select_related('company').order_by(Lower('company__name'), '-is_primary', 'name'))
+        if len(contacts) != len(ids):
+            raise serializers.ValidationError({'contacts': 'Algún contacto ya no existe o es de una edición anterior. Recarga la página.'})
+        by_company = {}
+        for contact in contacts:
+            addresses = by_company.setdefault(contact.company, [])
+            if contact.email.lower() not in addresses:
+                addresses.append(contact.email.lower())
+        subject = emailing.fill_general_placeholders(data['subject'], request)
+        body = emailing.fill_general_placeholders(data['body'], request)
+        return data, by_company, subject, body
+
+    @staticmethod
+    def _all_addresses(by_company):
+        return list(dict.fromkeys(address for addresses in by_company.values() for address in addresses))
+
+    @action(detail=False, methods=['post'])
+    def preview(self, request):
+        _, by_company, subject, body = self._message(request)
+        return Response({'subject': subject, 'body': body, 'recipients': self._all_addresses(by_company),
+                         'companies': [{'id': c.id, 'name': c.name, 'recipients': addresses}
+                                       for c, addresses in by_company.items()]})
+
+    @action(detail=False, methods=['post'])
+    def send(self, request):
+        data, by_company, subject, body = self._message(request)
+        if not data['manual']:
+            if not settings.EMAIL_AUTOMATIC_SENDING:
+                return Response({'detail': 'El envío automático está desactivado. Usa «Abrir en Outlook».'},
+                                status=status.HTTP_400_BAD_REQUEST)
+            try:
+                emailing.send_bcc_email(self._all_addresses(by_company), subject, body)
+            except (smtplib.SMTPException, OSError) as exc:
+                return Response({'detail': f'No se ha enviado: {emailing.describe_smtp_error(exc)}.'},
+                                status=status.HTTP_502_BAD_GATEWAY)
+        others = len(by_company) - 1
+        together = f' en copia oculta junto con otras {others} empresa(s)' if others else ' en copia oculta'
+        for company, addresses in by_company.items():
+            record = emailing.log_email(company, request.user, addresses, subject, body, data['template'], manual=data['manual'])
+            header = (f'{EMAIL_KIND_LABELS[data["kind"]]} enviado{" desde Outlook" if data["manual"] else ""} '
+                      f'a {", ".join(addresses)}{together} (desde «Contactos»).')
+            CRMNote.objects.create(company=company, author=request.user, kind=CRMNote.Kind.EMAIL,
+                                   text=f'{header}\n\nAsunto: {record.subject}\n\n{record.body}')
+        return Response({'companies': len(by_company), 'recipients': len(self._all_addresses(by_company))},
+                        status=status.HTTP_201_CREATED)

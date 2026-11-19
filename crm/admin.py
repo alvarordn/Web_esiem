@@ -24,7 +24,8 @@ class AttendeeInline(admin.TabularInline):
 
 @admin.register(Company)
 class CompanyAdmin(admin.ModelAdmin):
-    list_display = ['name', 'edition', 'cif', 'sector', 'status', 'stand_number']
+    list_display = ['name', 'edition', 'cif', 'sector', 'status', 'stand_number', 'max_attendees']
+    list_editable = ['max_attendees']  # raise the attendee limit for specific companies
     list_filter = ['edition', 'status', 'sector']
     search_fields = ['name', 'cif', 'contacts__email']
     inlines = [ContactInline, AttendeeInline]

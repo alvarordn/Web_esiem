@@ -65,6 +65,7 @@ CHAIRS = [
     {'name': 'Cátedra Azvi', 'logo': 'img/catedras/azvi.png', 'url': f'{_CHAIR}/catedra-Azvi'},
     {'name': 'Cátedra Lantania: Ingeniería y Tecnología del Agua', 'logo': 'img/catedras/lantania.jpg',
      'url': f'{_CHAIR}/catedra-lantania'},
+    {'name': 'Cátedra évo de Movilidad de Nueva Generación', 'logo': 'img/catedras/evo.jpeg'},
 ]
 
 # Institutional contact, shown in the footer and on the exhibitors page.

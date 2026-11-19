@@ -13,6 +13,7 @@ router.register('objectives', api.ObjectiveViewSet, basename='objective')
 router.register('log-entries', api.LogEntryViewSet, basename='log-entry')
 router.register('attendees', api.AttendeeViewSet, basename='attendee')
 router.register('email-templates', api.EmailTemplateListView, basename='email-template')
+router.register('mailing', api.MailingViewSet, basename='mailing')
 
 urlpatterns = [
     path('panel/', views.panel, name='panel'),
